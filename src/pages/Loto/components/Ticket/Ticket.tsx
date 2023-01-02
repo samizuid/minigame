@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import cls from 'classnames'
 
 import styles from './Ticket.module.scss'
@@ -10,6 +10,24 @@ export const Ticket: React.FunctionComponent<{
   theme: string
   onSelect: (number: number) => void
 }> = ({ isCaller, numbers, numbersSelected, theme, onSelect }) => {
+
+  console.log('%c>>> log numbers', 'color:green', numbers)
+  useEffect(() => {
+    setTimeout(() => {
+      const backgroundAll = document.querySelectorAll(`.${styles.number}`)
+      const backgroundAllArray = Array.from(backgroundAll)
+  
+      backgroundAllArray.map((item: any) => {
+        item.style.backgroundColor = '#eeeeee'
+
+        const isItemEmpty = item.classList.contains(styles.empty)
+        if (isItemEmpty) {
+          item.style.backgroundColor = theme
+        }
+      })
+    }, 0)
+  }, [theme, numbers])
+
   return (
     <div
       className={cls({
@@ -20,7 +38,6 @@ export const Ticket: React.FunctionComponent<{
       {numbers.map((row: number[], rowIndex: number) => (
         <div
           key={rowIndex}
-          data-index={`row-${rowIndex}`}
           className={cls({
             [styles.row]: true,
           })}
@@ -28,10 +45,8 @@ export const Ticket: React.FunctionComponent<{
           {row.map((number, numberIndex) => (
             <div
               key={numberIndex}
-              data-index={`number-${numberIndex}`}
               className={cls({
                 [styles.number]: true,
-                [styles[theme]]: true,
                 [styles.empty]: !number,
                 [styles.selected]: numbersSelected.includes(number),
               })}

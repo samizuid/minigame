@@ -1,0 +1,37 @@
+.popupCountdownCustom {
+    display: flex;
+    gap: 10px;
+    font-weight: 500;
+
+    .countdownTime {
+        border-radius: 4px;
+        padding: 10px 30px;
+        background-color: var(--nonSelectBg);
+        color: var(--nonSelectText);
+    }
+
+    .countdownTime.selected {
+        background-color: var(--mainBgCaller);
+        color: var(--selectedText);
+    }
+}
+
+.popupVoiceCustom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: 500;
+
+    .voice {
+        text-align: center;
+        border-radius: 4px;
+        padding: 10px 30px;
+        background-color: var(--nonSelectBg);
+        color: var(--nonSelectText);
+    }
+
+    .voice.selected {
+        background-color: var(--mainBgCaller);
+        color: var(--selectedText);
+    }
+}

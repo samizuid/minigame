@@ -1,0 +1,14 @@
+.popupResetCustom {
+    display: flex;
+    gap: 10px;
+    font-weight: 500;
+
+    .button {
+        border: 0;
+        font-weight: 500;
+        border-radius: 4px;
+        padding: 10px 30px;
+        background-color: var(--mainBgPlayer);
+        color: var(--selectedText);
+    }
+}

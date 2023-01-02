@@ -6,4 +6,7 @@
   width: 100%;
   background-color: var(--white);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

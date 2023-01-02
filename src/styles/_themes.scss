@@ -1,24 +1,26 @@
 .main {
-  --radius: 8px;
+  --radius: 4px;
   --shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
-  --black: #333333;
+  --black: #3d474d;
   --white: #eeeeee;
   --selected: #a3be8c;
 
-  --color-1: #8fbcbb;
-  --color-2: #5e81ac;
-  --color-3: #bf616a;
-  --color-4: #d08770;
-  --color-5: #ebcb8b;
-  --color-6: #b48ead;
+  // --mainBgCaller: #2b557a;
+  --mainBgCaller: #426381;
+  --mainBgPlayer: #3e6f3e;
+  // --mainBgPlayer: #256d26;
+  --selectedText: #FEFFFD;
+
+  --nonSelectBg: #E4E8E9;
+  --nonSelectText: #bcc5cb;
 
   &.light {
-    --primary-color: #0081ff;
+    --primary-color: #eeeeee;
     --secondary-color: #5e81ac;
   }
 
   &.dark {
-    --primary-color: #0081ff;
+    --primary-color: #eeeeee;
     --secondary-color: #5e81ac;
   }
 }

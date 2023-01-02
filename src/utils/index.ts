@@ -26,6 +26,27 @@ export function transpose(matrix: number[][]) {
 const COLUMN_LENGTH = 9
 const ROW_LENGTH = 9
 
+
+function generateMatrix() {
+  const matrix = [];
+  const usedNumbers = new Set();
+
+  for (let i = 0; i < 9; i++) {
+    const row = [];
+    for (let j = 0; j < 5; j++) {
+      let number;
+      do {
+        number = Math.floor((i * 10 + j * 2) + Math.random() * 2 + 1);
+      } while (usedNumbers.has(number));
+      usedNumbers.add(number);
+      row.push(number);
+    }
+    matrix.push(row);
+  }
+
+  return matrix;
+}
+
 export function generateLotoTicket({
   rows = ROW_LENGTH,
   columns = COLUMN_LENGTH,
@@ -45,13 +66,10 @@ export function generateLotoTicket({
     generateArrayNumbers(80, 90, rows),
   ]
 
-  const generateNumbers = Array(columns)
-    .fill(1)
-    .map((_, index) => conditionsGenerate[index])
+  const transposeColumnToRow = transpose(conditionsGenerate)
 
-  const transposeColumnToRow = transpose(generateNumbers)
 
-  return transposeColumnToRow.map((row) => {
+  const result = transposeColumnToRow.map((row) => {
     const randomHidden = generateArrayNumbers(
       0,
       columns - 1,
@@ -62,4 +80,31 @@ export function generateLotoTicket({
       randomHidden.includes(numberIndex) ? 0 : number,
     )
   })
+
+  console.log('%c>>> log result', 'color:green', result)
+
+  return result
+}
+
+
+export const generateCallerNumbers = () => {
+  const array = [];
+
+  for (let i = 0; i <= 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      array.push(parseInt(`${j}${i}`));
+    }
+  }
+
+  array[0] = 90
+
+  return array
+}
+
+export const randomEnum = (anEnum: any) => {
+  const enumValues = Object.values(anEnum)
+  const randomIndex = Math.floor(Math.random() * enumValues.length)
+  const randomEnumValue = enumValues[randomIndex]
+
+  return randomEnumValue;
 }

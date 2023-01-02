@@ -10,13 +10,15 @@ export const Popup: React.FunctionComponent<{
   children: any
   isShowFooter?: boolean
   title?: string
+  isPlayer?: boolean
   onClose: () => void
   onConfirm?: () => void
 }> = ({
   isOpen,
   children,
   title = 'Notification',
-  isShowFooter = true,
+  isShowFooter = false,
+  isPlayer = false,
   onClose,
   onConfirm,
 }) => {
@@ -41,13 +43,20 @@ export const Popup: React.FunctionComponent<{
             </button>
           </div>
 
-          <div className={styles.popupBody}>{children}</div>
+          {children && <div className={styles.popupBody}>{children}</div>} 
 
           {isShowFooter && (
             <div className={styles.popupFooter}>
               <button
                 type='button'
-                className={cls(styles.button, styles.okButton)}
+                className={cls(styles.button, styles.cancelButton)}
+                onClick={onClose}
+              >
+                Không
+              </button>
+              <button
+                type='button'
+                className={cls(styles.button, styles.okButton, {[styles['okButton--player']]: isPlayer})}
                 onClick={onConfirm}
               >
                 OK

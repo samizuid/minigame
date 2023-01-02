@@ -48,6 +48,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: 500;
+  color: var(--black);
 }
 
 .popupClose {
@@ -67,7 +68,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 16px;
+  padding: 8px 16px 16px;
   font-size: 16px;
   font-weight: 400;
 }
@@ -77,19 +78,31 @@
   justify-content: center;
   align-items: center;
   padding: 16px;
+  gap: 16px;
+}
+
+.button {
+  border: 0;
+  border-radius: 4px;
+  padding: 10px 30px;
+  width: 100px;
+  font-weight: 500;
+
+  &:active {
+    opacity: 0.8;
+  }
 }
 
 .okButton {
-  padding: 8px 56px;
-  border: 2px solid var(--primary-color);
-  border-radius: var(--radius);
-  font-size: 18px;
-  color: var(--primary-color);
-  background-color: transparent;
+  background-color: var(--mainBgCaller);
+  color: var(--selectedText);
+}
 
-  &:active {
-    border-color: var(--black);
-    color: var(--white);
-    background-color: var(--black);
-  }
+.okButton--player {
+  background-color: var(--mainBgPlayer);
+}
+
+.cancelButton {
+  background-color: var(--nonSelectBg);
+  color: var(--black);
 }

@@ -1,62 +1,78 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import cls from 'classnames'
+import { BsPlayFill, BsPauseFill, CgColorPicker, ImMusic, TbMusicOff } from 'react-icons/all'
 
 import { ReactComponent as ReloadIcon } from '../../assets/reload-icon.svg'
-import { ReactComponent as SettingsIcon } from '../../assets/settings-icon.svg'
 import { ReactComponent as QRCode } from '../../assets/qr-code.svg'
 
-import { generateLotoTicket } from '../../utils'
-import { Popup } from '../../components'
-
+import { useClickOutSide } from '../../hooks'
+import { generateLotoTicket, randomEnum, randomIntFromInterval } from '../../utils'
 import { Ticket, Caller } from './components'
 
 import styles from './Loto.module.scss'
+import popupStyles from '../../components/Popup/Popup.module.scss'
 
-const THEME = 'THEME'
-const CALL_COUNT_DOWN = '5'
+import ResetCallerModal from './components/Caller/Modal/ResetCallerModal';
+import ResetPlayerModal from './components/Ticket/Modal/ResetPlayerModal';
+import SwitchMusicModal from './components/Ticket/Modal/SwitchMusicModal';
+import RoleTypeModal from './components/Modal/RoleTypeModal';
+import ThemeModal from './components/Modal/ThemeModal';
 
-const ROLE_TYPES = {
-  PLAYER: 'PLAYER',
-  CALLER: 'CALLER',
+export enum ROLE_TYPES {
+  PLAYER = 'PLAYER',
+  CALLER = 'CALLER',
 }
 
-const SETTING_OPTION = {
-  SETTING_THEME: 'SETTING_THEME',
-  SETTING_CALLER: 'SETTING_CALLER',
+export enum COLOR_TYPES {
+  COLOR_1 = '#8fbcbb',
+  COLOR_2 = '#5e81ac',
+  COLOR_3 = '#bf616a',
+  COLOR_4 = '#d08770',
+  COLOR_5 = '#ebcb8b',
+  COLOR_6 = '#b48ead'
 }
 
 export const Loto = () => {
-  const [lotoTicketFinal, setLotoTicketFinal] = useState<number[][]>([])
-  const [numbersSelected, setNumbersSelected] = useState<number[]>([])
-  const [isShowReloadPopup, setIsShowReloadPopup] = useState(false)
-  const [isShowSettingsPopup, setIsShowSettingsPopup] = useState(false)
-  const [isShowBingo, setIsShowBingo] = useState(false)
+  // Common
   const [isShowRolePopup, setIsShowRolePopup] = useState(true)
-  const [theme, setTheme] = useState('color-1')
   const [roleType, setRoleType] = useState('')
-  const [settingOptionSelected, setSettingOptionSelected] = useState('')
-  const [isReload, setIsReload] = useState(false)
-  const [termCallCountDownTimes, setTermCallCountDownTimes] =
-    useState(CALL_COUNT_DOWN)
-  const [callCountDownTimes, setCallCountDownTimes] = useState(CALL_COUNT_DOWN)
   const isCaller = roleType === ROLE_TYPES.CALLER
 
-  let SETTING_OPTIONS = [
-    {
-      id: SETTING_OPTION.SETTING_THEME,
-      name: 'Themes',
-    },
-  ]
+  // Player
+  const playingMusicBingo: any = useRef(null)
+  const [isPlayMusicBingo, setIsPlayMusicBingo] = useState<boolean>(true)
+  const [isShowConfirmPlayMusic, setIsShowConfirmPlayMusic] = useState<boolean>(false)
+  const [theme, setTheme] = useState<string>(randomEnum(COLOR_TYPES) as COLOR_TYPES)
+  const [isShowBingo, setIsShowBingo] = useState<boolean>(false)
+  const [numbersSelected, setNumbersSelected] = useState<number[]>([])
+  const [lotoTicketFinal, setLotoTicketFinal] = useState<number[][]>([])
+  const [isShowReloadPopup, setIsShowReloadPopup] = useState(false)
+  const [isShowTheme, setIsShowTheme] = useState(false)
 
-  if (isCaller) {
-    SETTING_OPTIONS = [
-      ...SETTING_OPTIONS,
-      {
-        id: SETTING_OPTION.SETTING_CALLER,
-        name: 'Caller Settings',
-      },
-    ]
-  }
+  // Caller
+  const [isStartedCall, setIsStartedCall] = useState(false)
+  const [isResetCaller, setIsResetCaller] = useState(false)
+
+  useClickOutSide({wrapperClass: popupStyles.popupContainer, callback: () => {
+    setIsShowTheme(false)
+    setIsShowReloadPopup(false)
+  }})
+
+  useEffect(() => {
+    handleReGenerateLotoTicket()
+  }, [])
+
+  useEffect(() => {
+    if (isShowBingo && isPlayMusicBingo) {
+      const randomNumber = randomIntFromInterval(1, 10)
+
+      playingMusicBingo.current = new Audio(`/bingo/${randomNumber}.mp3`);
+      playingMusicBingo.current.play()
+    } else {
+      playingMusicBingo.current?.pause()
+      playingMusicBingo.current = null
+    }
+  }, [isShowBingo])
 
   const handleSelectNumber = (number: number) => {
     const isExisting = numbersSelected.includes(number)
@@ -92,31 +108,7 @@ export const Loto = () => {
     setNumbersSelected([])
     setIsShowReloadPopup(false)
     setIsShowBingo(false)
-
-    setIsReload(isCaller)
-  }
-
-  const handleCloseSettings = () => {
-    const themeDefault = localStorage.getItem(THEME)
-
-    if (themeDefault) {
-      setTheme(themeDefault)
-    }
-
-    setIsShowSettingsPopup(false)
-    setSettingOptionSelected('')
-  }
-
-  const handleConfirmSettings = () => {
-    const themeDefault = localStorage.getItem(THEME)
-
-    theme !== themeDefault && localStorage.setItem(THEME, theme)
-
-    termCallCountDownTimes !== CALL_COUNT_DOWN &&
-      setCallCountDownTimes(termCallCountDownTimes)
-
-    setIsShowSettingsPopup(false)
-    setSettingOptionSelected('')
+    setIsResetCaller(isCaller)
   }
 
   const handleSelectRole = (roleType: string) => {
@@ -124,64 +116,90 @@ export const Loto = () => {
     setIsShowRolePopup(false)
   }
 
-  useEffect(() => {
-    const themeDefault = localStorage.getItem(THEME)
 
-    handleReGenerateLotoTicket()
 
-    if (themeDefault) {
-      localStorage.setItem(THEME, themeDefault)
-
-      setTheme(themeDefault)
-    } else {
-      localStorage.setItem(THEME, 'color-1')
+  const handleTurnOffBingo = () => {
+    if (isShowBingo) {
+      setIsShowBingo(false)
     }
-  }, [])
+  }
 
   return (
     <>
-      <header className={styles.header}>
-        <img src='/images/lucky.jpeg' className={styles.logo} alt='logo' />
+      <div onClick={handleTurnOffBingo}>
+        {isShowBingo && <img className={styles.wonBg} src='../../../public/images/won/bg.png' />}
+        <header className={styles.header}>
+          <div className={styles.logoWrapper} onClick={() => {
+            setIsShowRolePopup(true)
+            setIsStartedCall(false)
+          }}>
+            <img src='/images/lucky.jpeg' className={styles.logo} alt='logo' />
+          </div>
 
-        <div>
-          <button
+          {isCaller && <button
             type='button'
-            className={cls(styles.button, styles.reloadButton)}
-            onClick={() => setIsShowReloadPopup(true)}
+            className={cls(styles.button)}
           >
-            <ReloadIcon />
-          </button>
-          <button
-            type='button'
-            className={cls(styles.button, styles.settingsButton)}
-            onClick={() => setIsShowSettingsPopup(true)}
-          >
-            <SettingsIcon />
-          </button>
-        </div>
-      </header>
+            {isStartedCall ?
+              <BsPlayFill onClick={() => setIsStartedCall(false)} /> :
+              <BsPauseFill onClick={() => setIsStartedCall(true)}  />
+            }
+            </button>}
 
-      <div className={styles.body}>
-        <Ticket
-          isCaller={isCaller}
-          numbers={lotoTicketFinal}
-          numbersSelected={numbersSelected}
-          theme={theme}
-          onSelect={handleSelectNumber}
-        />
+          <div className={styles.settingWrapper}>
+            {!isCaller && (
+              <>
+                <button
+                  type='button'
+                  className={cls(styles.button, styles.colorPlayer)}
+                  onClick={() => setIsShowConfirmPlayMusic(true)}
+                >
+                  {isPlayMusicBingo ? <ImMusic /> : <TbMusicOff className={styles.musicOffIcon}/>}
+                </button>
+                <button
+                  type='button'
+                  className={cls(styles.button, styles.colorPlayer)}
+                  onClick={() => setIsShowTheme(true)}
+                >
+                  <CgColorPicker />
+                </button>
+              </>)
+            }
+            <button
+              type='button'
+              className={cls(styles.button, styles.rotate, {[styles.colorPlayer]: !isCaller})}
+              onClick={() => setIsShowReloadPopup(true)}
+            >
+              <ReloadIcon />
+            </button>
+          </div>
+        </header>
 
-        {isCaller && (
-          <Caller
-            isReload={isReload}
-            setIsReload={setIsReload}
-            callCountDownTimes={Number(callCountDownTimes)}
+        <div className={cls(styles.body, {[styles.player]: !isCaller })}>
+          <Ticket
+            isCaller={isCaller}
+            numbers={lotoTicketFinal}
+            numbersSelected={numbersSelected}
+            theme={theme}
+            onSelect={handleSelectNumber}
           />
-        )}
+
+          {isCaller && (
+            <Caller
+              isShowReloadPopup={isShowReloadPopup}
+              isStartedCall={isStartedCall}
+              setIsStartedCall={setIsStartedCall}
+              isResetCaller={isResetCaller}
+              setIsResetCaller={setIsResetCaller}
+              setIsShowReloadPopup={setIsShowReloadPopup}
+            />
+          )}
+        </div>
       </div>
 
       <footer className={styles.footer}>
         <div className={styles.banner} />
-        <span>Power by tiennm</span>
+        <div className={styles.madeBy}>Made by <a href='https://www.facebook.com/Zino.io'>QuanDuy</a></div>
 
         <div className={styles.qrCode}>
           <QRCode />
@@ -189,150 +207,43 @@ export const Loto = () => {
       </footer>
 
       {isShowRolePopup && (
-        <Popup
-          title={'Role Type?'}
-          isOpen={isShowRolePopup}
-          onClose={() => setIsShowRolePopup(false)}
-          isShowFooter={false}
-        >
-          <div className={styles.popupCustom}>
-            <button
-              type='button'
-              className={cls(styles.button, styles.roleButton)}
-              onClick={() => handleSelectRole(ROLE_TYPES.PLAYER)}
-            >
-              Player
-            </button>
-            <button
-              type='button'
-              className={cls(styles.button, styles.roleButton)}
-              onClick={() => handleSelectRole(ROLE_TYPES.CALLER)}
-            >
-              Caller
-            </button>
-          </div>
-        </Popup>
+        <RoleTypeModal
+          isShow={isShowRolePopup}
+          setIsShow={setIsShowRolePopup}
+          handleSelectRole={handleSelectRole}
+        />)
+      }
+
+      {isShowConfirmPlayMusic && !isCaller && (
+        <SwitchMusicModal
+          isShow={isShowConfirmPlayMusic}
+          isPlayMusicBingo={isPlayMusicBingo}
+          setIsShow={setIsShowConfirmPlayMusic}
+          setIsPlayMusicBingo={setIsPlayMusicBingo}
+        />
       )}
 
-      {isShowBingo && (
-        <Popup
-          title={'🎊 Congratulations !!!'}
-          isOpen={isShowBingo}
-          onClose={() => setIsShowReloadPopup(false)}
-          isShowFooter={false}
-        >
-          <div className={styles.popupCustom}>
-            <div className={styles.popupContent}>
-              <span>You won 🎉</span>
-            </div>
-
-            <div className={styles.buttonsGroup}>
-              <button
-                type='button'
-                className={cls(styles.button, styles.okButton)}
-                onClick={() => setIsShowBingo(false)}
-              >
-                Skip
-              </button>
-              <button
-                type='button'
-                className={cls(styles.button, styles.okButton)}
-                onClick={() => handleReGenerateLotoTicket()}
-              >
-                Create
-              </button>
-            </div>
-          </div>
-        </Popup>
+      {isShowReloadPopup && isCaller && (
+        <ResetCallerModal
+          setIsResetCaller={setIsResetCaller}
+          isShow={isShowReloadPopup}
+          setIsShow={setIsShowReloadPopup}/>
       )}
 
-      {isShowReloadPopup && (
-        <Popup
-          isOpen={isShowReloadPopup}
-          onClose={() => setIsShowReloadPopup(false)}
-          isShowFooter={false}
-        >
-          <div className={styles.popupCustom}>
-            <div className={styles.popupContent}>
-              <span>Create a new ticket?</span>
-            </div>
-
-            <div className={styles.buttonsGroup}>
-              <button
-                type='button'
-                className={cls(styles.button, styles.okButton)}
-                onClick={() => handleReGenerateLotoTicket(false)}
-              >
-                Keep & Clean
-              </button>
-              <button
-                type='button'
-                className={cls(styles.button, styles.okButton)}
-                onClick={() => handleReGenerateLotoTicket()}
-              >
-                Create
-              </button>
-            </div>
-          </div>
-        </Popup>
+      {isShowReloadPopup && !isCaller && (
+        <ResetPlayerModal
+          setIsResetPlayer={handleReGenerateLotoTicket}
+          isShow={isShowReloadPopup}
+          setIsShow={setIsShowReloadPopup}
+        />
       )}
 
-      {isShowSettingsPopup && (
-        <Popup
-          isOpen={isShowSettingsPopup}
-          title={'Settings'}
-          onClose={handleCloseSettings}
-          onConfirm={handleConfirmSettings}
-        >
-          <div className={styles.wrapperSettings}>
-            {!settingOptionSelected &&
-              SETTING_OPTIONS.map((option) => {
-                return (
-                  <button
-                    key={option.id}
-                    type='button'
-                    className={styles.button}
-                    onClick={() => setSettingOptionSelected(option.id)}
-                  >
-                    {option.name}
-                  </button>
-                )
-              })}
-
-            {settingOptionSelected === SETTING_OPTION.SETTING_THEME && (
-              <>
-                {[1, 2, 3, 4, 5, 6].map((colorNumber) => {
-                  const themeNumber = `color-${colorNumber}`
-
-                  return (
-                    <div
-                      key={colorNumber}
-                      className={cls(
-                        styles.color,
-                        styles[themeNumber],
-                        theme === themeNumber && styles.colorSelected,
-                      )}
-                      onClick={() => setTheme(themeNumber)}
-                    />
-                  )
-                })}
-              </>
-            )}
-
-            {settingOptionSelected === SETTING_OPTION.SETTING_CALLER && (
-              <>
-                <input
-                  type='number'
-                  className={cls(styles.input)}
-                  value={termCallCountDownTimes}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setTermCallCountDownTimes(e.target.value)
-                  }
-                />
-              </>
-            )}
-          </div>
-        </Popup>
+      {isShowTheme && !isCaller && (
+        <ThemeModal
+          theme={theme}
+          isShow={isShowTheme}
+          setTheme={setTheme}
+          setIsShow={setIsShowTheme}/>
       )}
     </>
   )

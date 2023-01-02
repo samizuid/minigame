@@ -1,104 +1,157 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { ImMusic, BiTime} from 'react-icons/all'
 import cls from 'classnames'
 
-import { generateArrayNumbers } from '../../../../utils'
-import { useCountDown } from '../../../../hooks'
+import VoiceModal from './Modal/VoiceModal';
+import CountdownModal from './Modal/CountdownModal';
+import { generateCallerNumbers, randomIntFromInterval } from '../../../../utils'
+import { useCountDown, useClickOutSide } from '../../../../hooks'
 
+import popupStyles from '../../../../components/Popup/Popup.module.scss'
 import styles from './Caller.module.scss'
 
+const CALL_COUNT_DOWN = '5'
+const CALL_VOICE = 'gay'
+
 export const Caller: React.FunctionComponent<{
-  isReload: boolean
-  callCountDownTimes: number
-  setIsReload: (isBoolean: boolean) => void
-}> = ({ isReload, callCountDownTimes, setIsReload }) => {
-  const [numbersToCall, setNumbersToCall] = useState<number[]>([])
-  const [numberCalled, setNumberCalled] = useState<number[]>([])
-  const [isStartedCall, setIsStartedCall] = useState(false)
+  isShowReloadPopup: boolean
+  isStartedCall: boolean
+  isResetCaller: boolean
+  setIsStartedCall:  (isStartedCall: boolean) => void
+  setIsResetCaller: (isBoolean: boolean) => void
+  setIsShowReloadPopup: (isShow: boolean) => void
+}> = ({ isResetCaller, isStartedCall, isShowReloadPopup, setIsResetCaller, setIsStartedCall, setIsShowReloadPopup }) => {
+  const playingVoice: any = useRef(null)
+  const [calledNumbers, setCalledNumbers] = useState<number[]>([])
+
+  const [isShowCountdown, setIsShowCountdown] = useState<boolean>(false)
+  const [voice, setVoice] = useState(CALL_VOICE)
+  const [isShowVoice, setIsShowVoice] = useState<boolean>(false)
+  const [countdown, setCountdown] = useState(CALL_COUNT_DOWN)
   const { timer, startTimer, stopTimer } = useCountDown({})
+  const numberCurrent = calledNumbers.at(-1)
+  const pastTimes =  calledNumbers.slice(0, calledNumbers.length-1).slice(-4)
 
-  const handlePauseCall = () => {
-    setIsStartedCall(false)
-  }
 
-  const handleCallNewNumber = () => {
-    const numbersToCallUpdated = [...numbersToCall]
-    const number = numbersToCallUpdated.shift()
+  useClickOutSide({wrapperClass: popupStyles.popupContainer,  callback: () =>  {
+    setIsShowVoice(false)
+    setIsShowCountdown(false)
+    setIsShowReloadPopup(false)
+  }})
 
-    if (!isStartedCall) {
-      startTimer(callCountDownTimes)
+  // Handle voice
+  useEffect(() => {
+    if([isShowReloadPopup, isShowVoice, isShowCountdown].some(Boolean)) {
+      setIsStartedCall(false)
     }
-
-    setIsStartedCall(true)
-
-    if (isStartedCall && number) {
-      setNumberCalled([...numberCalled, number])
-      setNumbersToCall(numbersToCallUpdated)
-    }
-  }
+  }, [isShowReloadPopup, isShowVoice, isShowCountdown])
 
   useEffect(() => {
-    setNumbersToCall(generateArrayNumbers(1, 90, 90))
+    if (!numberCurrent) return
+
+    playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
 
     return () => {
-      stopTimer()
+      playingVoice.current?.pause()
+      playingVoice.current = null
     }
-  }, [])
+  }, [voice, numberCurrent])
 
   useEffect(() => {
-    if (isReload) {
-      stopTimer()
-      setIsStartedCall(false)
-      setNumbersToCall(generateArrayNumbers(1, 90, 90))
-      setNumberCalled([])
-      setIsReload(false)
-    }
-  }, [isReload])
+    if (!playingVoice.current) return
 
-  useEffect(() => {
-    if (!isStartedCall) {
-      return
+    if (isStartedCall) {
+      playingVoice.current.play()
+    } else {
+      playingVoice.current.pause()
+      playingVoice.current = null
     }
+  }, [numberCurrent, isStartedCall])
+
+
+  // Handle countdown
+  useEffect(() => {
+    if (!isStartedCall) return
 
     if (timer === 0) {
-      startTimer(callCountDownTimes)
+      startTimer(+countdown)
     }
 
-    if (timer === callCountDownTimes) {
+    if (timer === +countdown) {
       handleCallNewNumber()
     }
-  }, [isStartedCall, callCountDownTimes, timer])
+  }, [isStartedCall, countdown, timer])
+
+  useEffect(() => {
+    if (!isResetCaller) return
+
+    setCalledNumbers([])
+    setIsResetCaller(false)
+
+  }, [isResetCaller])
+
+  const handleCallNewNumber = () => {
+    const randomNumber = randomIntFromInterval(1, 90)
+
+    if (calledNumbers.includes(randomNumber)) {
+      if (calledNumbers.length < 90) {
+        handleCallNewNumber()
+      } else {
+        stopTimer()
+      }
+    } else {
+      setCalledNumbers([...calledNumbers, randomNumber])
+    }
+  }
 
   return (
     <div className={styles.caller}>
       <div className={styles.callerHeader}>
-        <h3 className={styles.callerTitle}>Random Numbers:</h3>
-
-        <button
-          type='button'
-          className={styles.button}
-          onClick={isStartedCall ? handlePauseCall : handleCallNewNumber}
-        >
-          {isStartedCall ? timer + 's' : 'Call'}
-        </button>
+        <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
+        <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
+        <div className={styles.setting}>
+          <button
+            type='button'
+            className={styles.button}
+            onClick={() => setIsShowCountdown(true)}
+          >
+            <BiTime />
+          </button>
+          <button
+            type='button'
+            className={styles.button}
+            onClick={() => setIsShowVoice(true)}
+          >
+            <ImMusic />
+          </button>
+        </div>
       </div>
       <div className={styles.callerNumbers}>
-        {numberCalled.length ? (
-          numberCalled.map((number) => (
+        {generateCallerNumbers().map((item: number) => {
+          return (
             <div
-              key={number}
-              className={cls({
-                [styles.callerNumber]: true,
-                [styles.justCalled]:
-                  number === numberCalled[numberCalled.length - 1],
-              })}
-            >
-              {number}
+              className={cls(styles.callerItem, {[styles.selected]: calledNumbers.includes(item)})} 
+              key={item}
+              >
+                {item}
             </div>
-          ))
-        ) : (
-          <div>{'Please click on "Call" button to generate a number'}</div>
-        )}
+            )
+        })}
       </div>
+      {isShowCountdown && <CountdownModal
+        countdown={countdown}
+        isShowCountdown={isShowCountdown}
+        setCountdown={setCountdown}
+        setIsShowCountdown={setIsShowCountdown}
+      />
+      }
+      {isShowVoice && <VoiceModal
+        voice={voice}
+        isShowVoice={isShowVoice}
+        setVoice={setVoice}
+        setIsShowVoice={setIsShowVoice}
+      />
+      }
     </div>
   )
 }
