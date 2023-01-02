@@ -2,4 +2,4 @@
 This repo created Loto Vietnam game.
 
 Website:
-- https://lotothoi.netlify.app
+- https://lotodzo.netlify.app

@@ -3,7 +3,6 @@ import cls from 'classnames'
 import { BsPlayFill, BsPauseFill, CgColorPicker, ImMusic, TbMusicOff } from 'react-icons/all'
 
 import { ReactComponent as ReloadIcon } from '../../assets/reload-icon.svg'
-import { ReactComponent as QRCode } from '../../assets/qr-code.svg'
 
 import { useClickOutSide } from '../../hooks'
 import { generateLotoTicket, randomEnum, randomIntFromInterval } from '../../utils'
@@ -202,7 +201,7 @@ export const Loto = () => {
         <div className={styles.madeBy}>Made by <a href='https://www.facebook.com/Zino.io'>QuanDuy</a></div>
 
         <div className={styles.qrCode}>
-          <QRCode />
+          <img src='/public/images/qr-code.png' />
         </div>
       </footer>
 
