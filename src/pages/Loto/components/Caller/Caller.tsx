@@ -13,6 +13,8 @@ import styles from './Caller.module.scss'
 const CALL_COUNT_DOWN = '5'
 const CALL_VOICE = 'gay'
 
+const URL = window.location.hostname
+
 export const Caller: React.FunctionComponent<{
   isShowReloadPopup: boolean
   isStartedCall: boolean
@@ -49,7 +51,7 @@ export const Caller: React.FunctionComponent<{
   useEffect(() => {
     if (!numberCurrent) return
 
-    playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
+    playingVoice.current = new Audio(`${URL}/voices/${voice}/${numberCurrent}.mp3`);
 
     return () => {
       playingVoice.current?.pause()
