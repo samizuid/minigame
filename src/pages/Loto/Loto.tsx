@@ -117,8 +117,6 @@ export const Loto = () => {
     setIsShowRolePopup(false)
   }
 
-
-
   const handleTurnOffBingo = () => {
     if (isShowBingo) {
       setIsShowBingo(false)
@@ -187,6 +185,7 @@ export const Loto = () => {
 
           {isCaller && (
             <Caller
+              isShowRolePopup={isShowRolePopup}
               isShowReloadPopup={isShowReloadPopup}
               isStartedCall={isStartedCall}
               setIsStartedCall={setIsStartedCall}

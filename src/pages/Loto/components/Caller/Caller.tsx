@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { ImMusic, BiTime} from 'react-icons/all'
+import { ImMusic, BiTime, FiXCircle} from 'react-icons/all'
 import cls from 'classnames'
 
 import VoiceModal from './Modal/VoiceModal';
@@ -16,6 +16,7 @@ const CALL_VOICE = 'gay'
 const URL = window.location.hostname
 
 export const Caller: React.FunctionComponent<{
+  isShowRolePopup: boolean
   isShowReloadPopup: boolean
   isStartedCall: boolean
   isResetCaller: boolean
@@ -23,7 +24,7 @@ export const Caller: React.FunctionComponent<{
   setIsResetCaller: (isBoolean: boolean) => void
   setIsShowReloadPopup: (isShow: boolean) => void
 }> = ({ isResetCaller, isStartedCall, isShowReloadPopup, setIsResetCaller, setIsStartedCall, setIsShowReloadPopup }) => {
-  const playingVoice: any = useRef(null)
+  const playingVoice: any = useRef(new Audio(`/voices/gay/1.mp3`))
   const [calledNumbers, setCalledNumbers] = useState<number[]>([])
   const [isShowCountdown, setIsShowCountdown] = useState<boolean>(false)
   const [voice, setVoice] = useState(CALL_VOICE)
@@ -32,7 +33,6 @@ export const Caller: React.FunctionComponent<{
   const { timer, startTimer, stopTimer } = useCountDown({})
   const numberCurrent = calledNumbers.at(-1)
   const pastTimes =  calledNumbers.slice(0, calledNumbers.length-1).slice(-4)
-
 
   useClickOutSide({wrapperClass: popupStyles.popupContainer,  callback: () =>  {
     setIsShowVoice(false)
@@ -49,11 +49,8 @@ export const Caller: React.FunctionComponent<{
 
   useEffect(() => {
     if (!numberCurrent) return
-    playingVoice.current = new Audio()
-    playingVoice.current.autoplay = true;
 
-    playingVoice.src = `/voices/${voice}/${numberCurrent}.mp3`
-    // playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
+    playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
 
     return () => {
       playingVoice.current?.pause()
@@ -61,16 +58,14 @@ export const Caller: React.FunctionComponent<{
     }
   }, [voice, numberCurrent])
 
-  const handleVoice = () => {
-    playingVoice.current = new Audio(`/voices/${'gay'}/${'1'}.mp3`);
-    playingVoice.current.play()
-  }
 
   useEffect(() => {
     if (!playingVoice.current) return
 
     if (isStartedCall) {
       playingVoice.current.play()
+      // const playAudio = document.getElementById('play-audio')
+      // playAudio?.click()
     } else {
       playingVoice.current.pause()
       playingVoice.current = null
@@ -119,6 +114,14 @@ export const Caller: React.FunctionComponent<{
         <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
         <div className={styles.setting}>
           <button
+            id='play-audio'
+            type='button'
+            className={styles.button}
+            onClick={() => playingVoice.current?.play()}
+          >
+            <FiXCircle />
+          </button>
+          <button
             type='button'
             className={styles.button}
             onClick={() => setIsShowCountdown(true)}
@@ -129,8 +132,7 @@ export const Caller: React.FunctionComponent<{
             type='button'
             className={styles.button}
             onClick={() => {
-              setIsShowVoice(true) 
-              handleVoice()
+              setIsShowVoice(true)
             }}
           >
             <ImMusic />
