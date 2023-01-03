@@ -104,7 +104,7 @@ export const Loto = () => {
 
     console.log('%c>>> log biisfd', 'color:green', isCheckBingo)
 
-    if (isShowBingo && isPlayMusicBingo) {
+    if (isCheckBingo && isPlayMusicBingo) {
       const randomNumber = randomIntFromInterval(1, 10)
 
       playingMusicBingo.current = new Audio(`/bingo/${randomNumber}.mp3`);
