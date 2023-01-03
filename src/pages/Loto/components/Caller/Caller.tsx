@@ -11,9 +11,7 @@ import popupStyles from '../../../../components/Popup/Popup.module.scss'
 import styles from './Caller.module.scss'
 
 const CALL_COUNT_DOWN = '5'
-const CALL_VOICE = 'gay'
-
-const URL = window.location.hostname
+const CALL_VOICE = 'male-south'
 
 export const Caller: React.FunctionComponent<{
   isShowRolePopup: boolean
@@ -51,11 +49,12 @@ export const Caller: React.FunctionComponent<{
     if (!numberCurrent) return
 
     playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
+    playingVoice.current.load()
 
-    return () => {
-      playingVoice.current?.pause()
-      playingVoice.current = null
-    }
+    // return () => {
+    //   playingVoice.current?.pause()
+    //   playingVoice.current = null
+    // }
   }, [voice, numberCurrent])
 
 
@@ -71,6 +70,10 @@ export const Caller: React.FunctionComponent<{
       // playingVoice.current = null
     }
   }, [numberCurrent, isStartedCall, calledNumbers])
+
+  const handleClick = () => {
+    playingVoice.current?.play()
+  }
 
   // Handle countdown
   useEffect(() => {
@@ -117,7 +120,7 @@ export const Caller: React.FunctionComponent<{
             id='play-audio'
             type='button'
             className={styles.button}
-            onClick={() => playingVoice.current?.play()}
+            onClick={handleClick}
           >
             <FiXCircle />
           </button>
