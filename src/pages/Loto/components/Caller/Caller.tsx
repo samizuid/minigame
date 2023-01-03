@@ -53,10 +53,10 @@ export const Caller: React.FunctionComponent<{
 
     playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
 
-    return () => {
-      playingVoice.current?.pause()
-      playingVoice.current = null
-    }
+    // return () => {
+    //   playingVoice.current?.pause()
+    //   playingVoice.current = null
+    // }
   }, [voice, numberCurrent])
 
   useEffect(() => {

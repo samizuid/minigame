@@ -81,8 +81,6 @@ export function generateLotoTicket({
     )
   })
 
-  console.log('%c>>> log result', 'color:green', result)
-
   return result
 }
 

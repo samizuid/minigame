@@ -11,13 +11,12 @@ export const Ticket: React.FunctionComponent<{
   onSelect: (number: number) => void
 }> = ({ isCaller, numbers, numbersSelected, theme, onSelect }) => {
 
-  console.log('%c>>> log numbers', 'color:green', numbers)
   useEffect(() => {
     setTimeout(() => {
       const backgroundAll = document.querySelectorAll(`.${styles.number}`)
       const backgroundAllArray = Array.from(backgroundAll)
   
-      backgroundAllArray.map((item: any) => {
+      backgroundAllArray.forEach((item: any) => {
         item.style.backgroundColor = '#eeeeee'
 
         const isItemEmpty = item.classList.contains(styles.empty)
