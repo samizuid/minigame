@@ -134,7 +134,7 @@ export const Loto = () => {
 
   return (
     <>
-      <div onClick={handleTurnOffBingo}>
+      <div className={styles.wrapperHeader} onClick={handleTurnOffBingo}>
         {isShowBingo && <img className={styles.wonBg} src={`/images/won/bg.png`} />}
         <header className={styles.header}>
           <div className={styles.logoWrapper} onClick={() => {
