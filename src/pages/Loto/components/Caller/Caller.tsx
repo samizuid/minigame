@@ -65,6 +65,12 @@ export const Caller: React.FunctionComponent<{
       // playingVoice.current.play()
       const playAudio = document.getElementById('play-audio')
       playAudio?.click()
+      playAudio?.click()
+      playAudio?.click()
+      setTimeout(() => {
+
+        playingVoice.current?.play()
+      }, 3000)
     } else {
       // playingVoice.current.pause()
       // playingVoice.current = null
@@ -72,7 +78,10 @@ export const Caller: React.FunctionComponent<{
   }, [numberCurrent, isStartedCall, calledNumbers])
 
   const handleClick = () => {
-    playingVoice.current?.play()
+    setTimeout(() => {
+
+      playingVoice.current?.play()
+    }, 3)
   }
 
   // Handle countdown
