@@ -49,14 +49,22 @@ export const Caller: React.FunctionComponent<{
 
   useEffect(() => {
     if (!numberCurrent) return
+    playingVoice.current = new Audio()
+    playingVoice.current.autoplay = true;
 
-    playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
+    playingVoice.src = `/voices/${voice}/${numberCurrent}.mp3`
+    // playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
 
     return () => {
       playingVoice.current?.pause()
       playingVoice.current = null
     }
   }, [voice, numberCurrent])
+
+  const handleVoice = () => {
+    playingVoice.current = new Audio(`/voices/${'gay'}/${'1'}.mp3`);
+    playingVoice.current.play()
+  }
 
   useEffect(() => {
     if (!playingVoice.current) return
@@ -120,7 +128,10 @@ export const Caller: React.FunctionComponent<{
           <button
             type='button'
             className={styles.button}
-            onClick={() => setIsShowVoice(true)}
+            onClick={() => {
+              setIsShowVoice(true) 
+              handleVoice()
+            }}
           >
             <ImMusic />
           </button>
