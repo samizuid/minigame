@@ -33,11 +33,20 @@ export enum COLOR_TYPES {
 
 const URL = window.location.hostname
 
+const isMatchAndroid = navigator.userAgent.match(/Android/i)
+const isMatchIphone = navigator.userAgent.match(/iPhone/i)
+
 export const Loto = () => {
   // Common
   const [isShowRolePopup, setIsShowRolePopup] = useState(true)
   const [roleType, setRoleType] = useState('')
   const isCaller = roleType === ROLE_TYPES.CALLER
+  const getLinkFacebook = () => {
+    if (isMatchAndroid) return 'fb://page/Zino.io'
+    if (isMatchIphone) return 'fb://page/?id=Zino.io'
+
+    return 'https://www.facebook.com/Zino.io'
+  }
 
   // Player
   const playingMusicBingo: any = useRef(null)
@@ -199,7 +208,7 @@ export const Loto = () => {
 
       <footer className={styles.footer}>
         <div className={styles.banner} />
-        <div className={styles.madeBy}>Made by <a href='https://www.facebook.com/Zino.io'>QuanDuy</a></div>
+        <div className={styles.madeBy}>Made by <a href={getLinkFacebook()}>QuanDuy</a></div>
 
         <div className={styles.qrCode}>
           <img src='/images/qr-code.png' />
