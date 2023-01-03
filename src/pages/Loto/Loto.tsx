@@ -67,7 +67,7 @@ export const Loto = () => {
     if (isShowBingo && isPlayMusicBingo) {
       const randomNumber = randomIntFromInterval(1, 10)
 
-      playingMusicBingo.current = new Audio(`${URL}/bingo/${randomNumber}.mp3`);
+      playingMusicBingo.current = new Audio(`/bingo/${randomNumber}.mp3`);
       playingMusicBingo.current.play()
     } else {
       playingMusicBingo.current?.pause()
@@ -128,7 +128,7 @@ export const Loto = () => {
   return (
     <>
       <div onClick={handleTurnOffBingo}>
-        {isShowBingo && <img className={styles.wonBg} src={`${URL}/images/won/bg.png`} />}
+        {isShowBingo && <img className={styles.wonBg} src={`/images/won/bg.png`} />}
         <header className={styles.header}>
           <div className={styles.logoWrapper} onClick={() => {
             setIsShowRolePopup(true)
@@ -203,7 +203,7 @@ export const Loto = () => {
         <div className={styles.madeBy}>Made by <a href='https://www.facebook.com/Zino.io'>QuanDuy</a></div>
 
         <div className={styles.qrCode}>
-          <img src={`${URL}/images/qr-code.png`} />
+          <img src='/images/qr-code.png' />
         </div>
       </footer>
 
