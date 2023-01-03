@@ -24,7 +24,7 @@ export const Caller: React.FunctionComponent<{
   setIsResetCaller: (isBoolean: boolean) => void
   setIsShowReloadPopup: (isShow: boolean) => void
 }> = ({ isResetCaller, isStartedCall, isShowReloadPopup, setIsResetCaller, setIsStartedCall, setIsShowReloadPopup }) => {
-  const playingVoice: any = useRef(new Audio(`/voices/gay/1.mp3`))
+  const playingVoice: any = useRef(new Audio(``))
   const [calledNumbers, setCalledNumbers] = useState<number[]>([])
   const [isShowCountdown, setIsShowCountdown] = useState<boolean>(false)
   const [voice, setVoice] = useState(CALL_VOICE)
@@ -63,9 +63,9 @@ export const Caller: React.FunctionComponent<{
     if (!playingVoice.current) return
 
     if (isStartedCall) {
-      playingVoice.current.play()
-      // const playAudio = document.getElementById('play-audio')
-      // playAudio?.click()
+      // playingVoice.current.play()
+      const playAudio = document.getElementById('play-audio')
+      playAudio?.click()
     } else {
       playingVoice.current.pause()
       playingVoice.current = null
