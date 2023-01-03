@@ -25,7 +25,6 @@ export const Caller: React.FunctionComponent<{
 }> = ({ isResetCaller, isStartedCall, isShowReloadPopup, setIsResetCaller, setIsStartedCall, setIsShowReloadPopup }) => {
   const playingVoice: any = useRef(null)
   const [calledNumbers, setCalledNumbers] = useState<number[]>([])
-  const [aa, setAA] = useState<string>()
   const [isShowCountdown, setIsShowCountdown] = useState<boolean>(false)
   const [voice, setVoice] = useState(CALL_VOICE)
   const [isShowVoice, setIsShowVoice] = useState<boolean>(false)
@@ -53,10 +52,10 @@ export const Caller: React.FunctionComponent<{
 
     playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
 
-    // return () => {
-    //   playingVoice.current?.pause()
-    //   playingVoice.current = null
-    // }
+    return () => {
+      playingVoice.current?.pause()
+      playingVoice.current = null
+    }
   }, [voice, numberCurrent])
 
   useEffect(() => {
@@ -64,7 +63,6 @@ export const Caller: React.FunctionComponent<{
 
     if (isStartedCall) {
       playingVoice.current.play()
-      setAA(aa + '12')
     } else {
       playingVoice.current.pause()
       playingVoice.current = null
@@ -125,7 +123,6 @@ export const Caller: React.FunctionComponent<{
             onClick={() => setIsShowVoice(true)}
           >
             <ImMusic />
-            {aa}
           </button>
         </div>
       </div>
