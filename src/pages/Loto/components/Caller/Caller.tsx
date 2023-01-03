@@ -51,10 +51,10 @@ export const Caller: React.FunctionComponent<{
     playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
     playingVoice.current.load()
 
-    // return () => {
-    //   playingVoice.current?.pause()
-    //   playingVoice.current = null
-    // }
+    return () => {
+      playingVoice.current?.pause()
+      playingVoice.current = null
+    }
   }, [voice, numberCurrent])
 
 
@@ -62,26 +62,17 @@ export const Caller: React.FunctionComponent<{
     if (!playingVoice.current) return
 
     if (isStartedCall) {
-      // playingVoice.current.play()
-      const playAudio = document.getElementById('play-audio')
-      playAudio?.click()
-      playAudio?.click()
-      playAudio?.click()
-      setTimeout(() => {
-
-        playingVoice.current?.play()
-      }, 3000)
+      playingVoice.current.play()
+      // const playAudio = document.getElementById('play-audio')
+      // playAudio?.click()
     } else {
-      // playingVoice.current.pause()
-      // playingVoice.current = null
+      playingVoice.current.pause()
+      playingVoice.current = null
     }
   }, [numberCurrent, isStartedCall, calledNumbers])
 
   const handleClick = () => {
-    setTimeout(() => {
-
-      playingVoice.current?.play()
-    }, 3)
+    playingVoice.current?.play()
   }
 
   // Handle countdown
@@ -125,14 +116,14 @@ export const Caller: React.FunctionComponent<{
         <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
         <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
         <div className={styles.setting}>
-          <button
+          {/* <button
             id='play-audio'
             type='button'
             className={styles.button}
             onClick={handleClick}
           >
             <FiXCircle />
-          </button>
+          </button> */}
           <button
             type='button'
             className={styles.button}
