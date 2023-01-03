@@ -72,7 +72,8 @@ export const Caller: React.FunctionComponent<{
 
   useEffect(() => {
     if (calledNumbers.length) {
-      playingVoice.current = new Audio(`/voices/${voice}/${calledNumbers.at(-1)}.mp3`);
+      // playingVoice.current = new Audio(`/voices/${voice}/${calledNumbers.at(-1)}.mp3`);
+      playingVoice.current =  new Audio(`/bingo/1.mp3`);
       playingVoice.current.play()
     }
   }, [calledNumbers])
