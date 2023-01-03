@@ -31,8 +31,6 @@ export enum COLOR_TYPES {
   COLOR_6 = '#b48ead'
 }
 
-const URL = window.location.hostname
-
 const isMatchAndroid = navigator.userAgent.match(/Android/i)
 const isMatchIphone = navigator.userAgent.match(/iPhone/i)
 
@@ -42,7 +40,7 @@ export const Loto = () => {
   const [roleType, setRoleType] = useState('')
   const isCaller = roleType === ROLE_TYPES.CALLER
   const getLinkFacebook = () => {
-    if (isMatchAndroid) return 'fb://profile/100002318448258'
+    if (isMatchAndroid) return 'fb://page/100002318448258'
     if (isMatchIphone) return 'fb://profile/100002318448258'
 
     return 'https://www.facebook.com/Zino.io'
@@ -76,7 +74,8 @@ export const Loto = () => {
     if (isShowBingo && isPlayMusicBingo) {
       const randomNumber = randomIntFromInterval(1, 10)
 
-      playingMusicBingo.current = new Audio(`/bingo/${randomNumber}.mp3`);
+      // playingMusicBingo.current = new Audio(`/bingo/${randomNumber}.mp3`);
+      playingMusicBingo.current = new Audio(`/src/assets/1.mp3`);
       playingMusicBingo.current.play()
     } else {
       playingMusicBingo.current?.pause()
@@ -103,6 +102,8 @@ export const Loto = () => {
           .map((number) => result.includes(number)),
       )
       .some((row) => row.every(Boolean))
+
+    console.log('%c>>> log biisfd', 'color:green', isCheckBingo)
 
     setIsShowBingo(isCheckBingo)
     setNumbersSelected(result)
