@@ -72,10 +72,10 @@ export const Loto = () => {
 
   useEffect(() => {
     if (isShowBingo && isPlayMusicBingo) {
-      // const randomNumber = randomIntFromInterval(1, 10)
+      const randomNumber = randomIntFromInterval(1, 10)
 
-      // playingMusicBingo.current = new Audio(`/bingo/${randomNumber}.mp3`);
-      // playingMusicBingo.current.play()
+      playingMusicBingo.current = new Audio(`/bingo/${randomNumber}.mp3`);
+      playingMusicBingo.current.play()
     } else {
       playingMusicBingo.current?.pause()
       playingMusicBingo.current = null
@@ -101,15 +101,6 @@ export const Loto = () => {
           .map((number) => result.includes(number)),
       )
       .some((row) => row.every(Boolean))
-
-    console.log('%c>>> log biisfd', 'color:green', isCheckBingo)
-
-    if (isCheckBingo && isPlayMusicBingo) {
-      const randomNumber = randomIntFromInterval(1, 10)
-
-      playingMusicBingo.current = new Audio(`/bingo/${randomNumber}.mp3`);
-      playingMusicBingo.current.play()
-    }
 
     setIsShowBingo(isCheckBingo)
     setNumbersSelected(result)
