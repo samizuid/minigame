@@ -25,7 +25,7 @@ export const Caller: React.FunctionComponent<{
 }> = ({ isResetCaller, isStartedCall, isShowReloadPopup, setIsResetCaller, setIsStartedCall, setIsShowReloadPopup }) => {
   const playingVoice: any = useRef(null)
   const [calledNumbers, setCalledNumbers] = useState<number[]>([])
-
+  const [aa, setAA] = useState<string>()
   const [isShowCountdown, setIsShowCountdown] = useState<boolean>(false)
   const [voice, setVoice] = useState(CALL_VOICE)
   const [isShowVoice, setIsShowVoice] = useState<boolean>(false)
@@ -48,36 +48,28 @@ export const Caller: React.FunctionComponent<{
     }
   }, [isShowReloadPopup, isShowVoice, isShowCountdown])
 
-  // useEffect(() => {
-  //   if (!numberCurrent) return
+  useEffect(() => {
+    if (!numberCurrent) return
 
-  //   playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
+    playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
 
-  //   // return () => {
-  //   //   playingVoice.current?.pause()
-  //   //   playingVoice.current = null
-  //   // }
-  // }, [voice, numberCurrent])
-
-  // useEffect(() => {
-  //   if (!playingVoice.current) return
-
-  //   if (isStartedCall) {
-  //     playingVoice.current.play()
-  //   } else {
-  //     playingVoice.current.pause()
-  //     playingVoice.current = null
-  //   }
-  // }, [numberCurrent, isStartedCall, calledNumbers])
+    // return () => {
+    //   playingVoice.current?.pause()
+    //   playingVoice.current = null
+    // }
+  }, [voice, numberCurrent])
 
   useEffect(() => {
-    if (calledNumbers.length) {
-      // playingVoice.current = new Audio(`/voices/${voice}/${calledNumbers.at(-1)}.mp3`);
-      playingVoice.current =  new Audio(`/bingo/1.mp3`);
-      playingVoice.current.play()
-    }
-  }, [calledNumbers])
+    if (!playingVoice.current) return
 
+    if (isStartedCall) {
+      playingVoice.current.play()
+      setAA(aa + '12')
+    } else {
+      playingVoice.current.pause()
+      playingVoice.current = null
+    }
+  }, [numberCurrent, isStartedCall, calledNumbers])
 
   // Handle countdown
   useEffect(() => {
@@ -110,7 +102,6 @@ export const Caller: React.FunctionComponent<{
         stopTimer()
       }
     } else {
-      
       setCalledNumbers([...calledNumbers, randomNumber])
     }
   }
@@ -134,6 +125,7 @@ export const Caller: React.FunctionComponent<{
             onClick={() => setIsShowVoice(true)}
           >
             <ImMusic />
+            {aa}
           </button>
         </div>
       </div>
