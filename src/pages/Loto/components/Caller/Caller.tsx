@@ -48,27 +48,34 @@ export const Caller: React.FunctionComponent<{
     }
   }, [isShowReloadPopup, isShowVoice, isShowCountdown])
 
+  // useEffect(() => {
+  //   if (!numberCurrent) return
+
+  //   playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
+
+  //   // return () => {
+  //   //   playingVoice.current?.pause()
+  //   //   playingVoice.current = null
+  //   // }
+  // }, [voice, numberCurrent])
+
+  // useEffect(() => {
+  //   if (!playingVoice.current) return
+
+  //   if (isStartedCall) {
+  //     playingVoice.current.play()
+  //   } else {
+  //     playingVoice.current.pause()
+  //     playingVoice.current = null
+  //   }
+  // }, [numberCurrent, isStartedCall, calledNumbers])
+
   useEffect(() => {
-    if (!numberCurrent) return
-
-    playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
-
-    // return () => {
-    //   playingVoice.current?.pause()
-    //   playingVoice.current = null
-    // }
-  }, [voice, numberCurrent])
-
-  useEffect(() => {
-    if (!playingVoice.current) return
-
-    if (isStartedCall) {
+    if (calledNumbers.length) {
+      playingVoice.current = new Audio(`/voices/${voice}/${calledNumbers.at(-1)}.mp3`);
       playingVoice.current.play()
-    } else {
-      // playingVoice.current.pause()
-      // playingVoice.current = null
     }
-  }, [numberCurrent, isStartedCall, calledNumbers])
+  }, [calledNumbers])
 
 
   // Handle countdown
@@ -102,6 +109,7 @@ export const Caller: React.FunctionComponent<{
         stopTimer()
       }
     } else {
+      
       setCalledNumbers([...calledNumbers, randomNumber])
     }
   }
