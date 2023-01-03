@@ -42,8 +42,8 @@ export const Loto = () => {
   const [roleType, setRoleType] = useState('')
   const isCaller = roleType === ROLE_TYPES.CALLER
   const getLinkFacebook = () => {
-    if (isMatchAndroid) return 'fb://facewebmodal/100002318448258'
-    if (isMatchIphone) return 'fb://page/100002318448258'
+    if (isMatchAndroid) return 'fb://profile/100002318448258'
+    if (isMatchIphone) return 'fb://profile/100002318448258'
 
     return 'https://www.facebook.com/Zino.io'
   }
