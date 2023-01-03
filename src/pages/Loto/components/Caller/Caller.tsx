@@ -67,8 +67,8 @@ export const Caller: React.FunctionComponent<{
       const playAudio = document.getElementById('play-audio')
       playAudio?.click()
     } else {
-      playingVoice.current.pause()
-      playingVoice.current = null
+      // playingVoice.current.pause()
+      // playingVoice.current = null
     }
   }, [numberCurrent, isStartedCall, calledNumbers])
 
