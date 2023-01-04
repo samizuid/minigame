@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import cls from 'classnames'
+import ReactGA from 'react-ga'
 import { BsPlayFill, BsPauseFill, CgColorPicker, ImMusic, TbMusicOff } from 'react-icons/all'
 
 import { ReactComponent as ReloadIcon } from '../../assets/reload-icon.svg'
@@ -42,7 +43,6 @@ export const Loto = () => {
   const isCaller = roleType === ROLE_TYPES.CALLER
   const getLinkFacebook = () => {
     if (isMatchAndroid) return 'fb://facewebmodal/f?href=https://www.facebook.com/Zino.io'
-    // if (isMatchAndroid) return 'fb://page/100002318448258'
     if (isMatchIphone) return 'fb://profile/100002318448258'
 
     return 'https://www.facebook.com/Zino.io'
@@ -71,8 +71,14 @@ export const Loto = () => {
   }})
 
   useEffect(() => {
+    ReactGA.initialize('G-BXH7D822R8');
     handleReGenerateLotoTicket()
   }, [])
+
+  console.log('%c>>> log location.pathname', 'color:green', location.pathname)
+
+  console.log('%c>>> log ReactGApage', 'color:green', ReactGA.pageview(location.pathname))
+  console.log('%c>>> log ReactGA', 'color:green', ReactGA)
 
   useEffect(() => {
     if (isShowBingo && isPlayMusicBingo) {
