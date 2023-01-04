@@ -16,7 +16,8 @@ const NotSupportIOSModal:FC<IProps> = ({isShow, setIsShow}) => {
             onClose={() => setIsShow(false)}
         >
             <div className={styles.popupSupportCustom}>
-                Audio gọi số chỉ đang hỗ trợ cho Android !
+                <div>Audio Gọi Số chỉ đang hỗ trợ cho</div> 
+                <div>điện thoại Android, Laptop, Desktop !</div>
             </div>
         </Popup>
     )
