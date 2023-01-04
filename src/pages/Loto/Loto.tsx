@@ -75,9 +75,9 @@ export const Loto = () => {
     handleReGenerateLotoTicket()
   }, [])
 
-  console.log('%c>>> log location.pathname', 'color:green', location.pathname)
+  console.log('%c>>> log location.pathname', 'color:green', location.origin)
 
-  console.log('%c>>> log ReactGApage', 'color:green', ReactGA.pageview(location.pathname))
+  console.log('%c>>> log ReactGApage', 'color:green', ReactGA.pageview(location.origin))
   console.log('%c>>> log ReactGA', 'color:green', ReactGA)
 
   useEffect(() => {
