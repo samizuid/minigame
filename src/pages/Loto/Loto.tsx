@@ -12,6 +12,7 @@ import styles from './Loto.module.scss'
 import popupStyles from '../../components/Popup/Popup.module.scss'
 
 import ResetCallerModal from './components/Caller/Modal/ResetCallerModal';
+import NotSupportIOSModal from './components/Caller/Modal/NotSupportIOSModal';
 import ResetPlayerModal from './components/Ticket/Modal/ResetPlayerModal';
 import SwitchMusicModal from './components/Ticket/Modal/SwitchMusicModal';
 import RoleTypeModal from './components/Modal/RoleTypeModal';
@@ -58,12 +59,14 @@ export const Loto = () => {
   const [isShowTheme, setIsShowTheme] = useState(false)
 
   // Caller
+  const [isShowNotifySupport, setIsShowNotifySupport] = useState(false)
   const [isStartedCall, setIsStartedCall] = useState(false)
   const [isResetCaller, setIsResetCaller] = useState(false)
 
   useClickOutSide({wrapperClass: popupStyles.popupContainer, callback: () => {
     setIsShowTheme(false)
     setIsShowReloadPopup(false)
+    setIsShowNotifySupport(false)
   }})
 
   useEffect(() => {
@@ -122,6 +125,10 @@ export const Loto = () => {
   const handleSelectRole = (roleType: string) => {
     setRoleType(roleType)
     setIsShowRolePopup(false)
+
+    if (roleType === ROLE_TYPES.CALLER) {
+      setIsShowNotifySupport(true)
+    }
   }
 
   const handleTurnOffBingo = () => {
@@ -221,6 +228,14 @@ export const Loto = () => {
         />)
       }
 
+      {isShowReloadPopup && !isCaller && (
+        <ResetPlayerModal
+          setIsResetPlayer={handleReGenerateLotoTicket}
+          isShow={isShowReloadPopup}
+          setIsShow={setIsShowReloadPopup}
+        />
+      )}
+
       {isShowConfirmPlayMusic && !isCaller && (
         <SwitchMusicModal
           isShow={isShowConfirmPlayMusic}
@@ -237,12 +252,10 @@ export const Loto = () => {
           setIsShow={setIsShowReloadPopup}/>
       )}
 
-      {isShowReloadPopup && !isCaller && (
-        <ResetPlayerModal
-          setIsResetPlayer={handleReGenerateLotoTicket}
-          isShow={isShowReloadPopup}
-          setIsShow={setIsShowReloadPopup}
-        />
+      {!isShowReloadPopup && isMatchIphone && isShowNotifySupport && (
+        <NotSupportIOSModal
+          isShow={isShowNotifySupport}
+          setIsShow={setIsShowNotifySupport}/>
       )}
 
       {isShowTheme && !isCaller && (
