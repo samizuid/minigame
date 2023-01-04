@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const CountdownModal:FC<IProps> = ({countdown, isShowCountdown, setCountdown, setIsShowCountdown}) => {
-    const countdownValues = ['3', '4', '5']
+    const countdownValues = ['4', '5', '6']
 
     return (
         <Popup
