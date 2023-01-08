@@ -34,7 +34,9 @@ const RoleTypeModal:FC<IProps> = ({isShow, setIsShow, handleSelectRole}) => {
             >
               Người gọi số
             </button>
-            <div className={styles.traffic}>Lượt truy cập: <span className={styles.trafficNumber}>{'chưa cập nhật'}</span></div>
+            {/* <div className={styles.traffic}>
+              Lượt truy cập: <span className={styles.trafficNumber}>{'chưa cập nhật'}</span>
+            </div> */}
           </div>
         </Popup>
     )
