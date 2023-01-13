@@ -62,7 +62,6 @@ function checkConsecutiveOnes(arr: any) {
 
 const generateTicketTemplateWrapper: any = () => {
   const templateTicket = generateTicketTemplate()
-  console.log('render')
 
   let saveCountRow = Array(9).fill(0)
   for (let col = 0; col < templateTicket.length; col++) {
@@ -76,7 +75,6 @@ const generateTicketTemplateWrapper: any = () => {
       // If having 5 consecutive 1s on a column
       if (row >= 5) {
         let consecutiveArr = templateTicket.slice(row - 5, row).map(r => r[col]);
-        console.log('%c>>> log consecutiveArr', 'color:green',consecutiveArr )
         if (consecutiveArr.every(Boolean)) {
           return generateTicketTemplateWrapper()
         }
@@ -147,7 +145,6 @@ export function generatePlayerTicket() {
   const ticketRaw = generateTicketRaw()
   const valueTicket = transpose(ticketRaw)
   const templateTicket = generateTicketTemplateWrapper()
-  console.log('%c>>> log templateTicket', 'color:green',templateTicket )
   const resultTicket = templateTicket.map((row: any) => row.slice())
 
   for (let i = 0; i < templateTicket.length; i++) {
@@ -160,7 +157,6 @@ export function generatePlayerTicket() {
 
   return resultTicket
 }
-
 
 export const generateCallerNumbers = () => {
   const array = [];

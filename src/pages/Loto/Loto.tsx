@@ -55,7 +55,7 @@ export const Loto = () => {
   const [theme, setTheme] = useState<string>(randomEnum(COLOR_TYPES) as COLOR_TYPES)
   const [isShowBingo, setIsShowBingo] = useState<boolean>(false)
   const [numbersSelected, setNumbersSelected] = useState<number[]>([])
-  const [lotoTicketFinal, setLotoTicketFinal] = useState<number[][]>([])
+  const [playerTicketFinal, setPlayerTicketFinal] = useState<number[][]>([])
   const [isShowReloadPopup, setIsShowReloadPopup] = useState(false)
   const [isShowTheme, setIsShowTheme] = useState(false)
 
@@ -74,11 +74,6 @@ export const Loto = () => {
     ReactGA.initialize('G-BXH7D822R8');
     handleRegeneratePlayerTicket()
   }, [])
-
-  // console.log('%c>>> log location.pathname', 'color:green', location.origin)
-
-  // console.log('%c>>> log ReactGApage', 'color:green', ReactGA.pageview(location.origin))
-  // console.log('%c>>> log ReactGA', 'color:green', ReactGA)
 
   useEffect(() => {
     if (isShowBingo && isPlayMusicBingo) {
@@ -104,7 +99,7 @@ export const Loto = () => {
       result = [...numbersSelected, number]
     }
 
-    const isCheckBingo = lotoTicketFinal
+    const isCheckBingo = playerTicketFinal
       .map((row) =>
         row
           .filter((number) => !!number)
@@ -116,11 +111,10 @@ export const Loto = () => {
     setNumbersSelected(result)
   }
 
-  const handleRegeneratePlayerTicket = (isCreateNew: boolean = true) => {
-    const newTicket = generatePlayerTicket()
-
+  const handleRegeneratePlayerTicket = async (isCreateNew: boolean = true) => {
     if (isCreateNew) {
-      setLotoTicketFinal(newTicket)
+      const newTicket = await generatePlayerTicket()
+      setPlayerTicketFinal(newTicket)
     }
 
     setNumbersSelected([])
@@ -198,7 +192,7 @@ export const Loto = () => {
         <div className={cls(styles.body, {[styles.player]: !isCaller })}>
           <Ticket
             isCaller={isCaller}
-            numbers={lotoTicketFinal}
+            numbers={playerTicketFinal}
             numbersSelected={numbersSelected}
             theme={theme}
             onSelect={handleSelectNumber}
