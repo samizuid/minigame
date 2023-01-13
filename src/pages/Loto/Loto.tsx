@@ -6,7 +6,7 @@ import { BsPlayFill, BsPauseFill, CgColorPicker, ImMusic, TbMusicOff } from 'rea
 import { ReactComponent as ReloadIcon } from '../../assets/reload-icon.svg'
 
 import { useClickOutSide } from '../../hooks'
-import { generateLotoTicket, randomEnum, randomIntFromInterval } from '../../utils'
+import { generatePlayerTicket, randomEnum, randomIntFromInterval } from '../../utils'
 import { Ticket, Caller } from './components'
 
 import styles from './Loto.module.scss'
@@ -72,13 +72,13 @@ export const Loto = () => {
 
   useEffect(() => {
     ReactGA.initialize('G-BXH7D822R8');
-    handleReGenerateLotoTicket()
+    handleRegeneratePlayerTicket()
   }, [])
 
-  console.log('%c>>> log location.pathname', 'color:green', location.origin)
+  // console.log('%c>>> log location.pathname', 'color:green', location.origin)
 
-  console.log('%c>>> log ReactGApage', 'color:green', ReactGA.pageview(location.origin))
-  console.log('%c>>> log ReactGA', 'color:green', ReactGA)
+  // console.log('%c>>> log ReactGApage', 'color:green', ReactGA.pageview(location.origin))
+  // console.log('%c>>> log ReactGA', 'color:green', ReactGA)
 
   useEffect(() => {
     if (isShowBingo && isPlayMusicBingo) {
@@ -116,8 +116,8 @@ export const Loto = () => {
     setNumbersSelected(result)
   }
 
-  const handleReGenerateLotoTicket = (isCreateNew: boolean = true) => {
-    const newTicket = generateLotoTicket({ rows: 9, columns: 9 })
+  const handleRegeneratePlayerTicket = (isCreateNew: boolean = true) => {
+    const newTicket = generatePlayerTicket()
 
     if (isCreateNew) {
       setLotoTicketFinal(newTicket)
@@ -237,7 +237,7 @@ export const Loto = () => {
 
       {isShowReloadPopup && !isCaller && (
         <ResetPlayerModal
-          setIsResetPlayer={handleReGenerateLotoTicket}
+          setIsResetPlayer={handleRegeneratePlayerTicket}
           isShow={isShowReloadPopup}
           setIsShow={setIsShowReloadPopup}
         />
