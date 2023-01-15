@@ -16,7 +16,7 @@ const IntroductionModal:FC<IProps> = ({isShow, setIsShow}) => {
     useEffect(() => {
         setTimeout(() => {
             setIsShowImage(true)
-        }, 800)
+        }, 400)
     }, [])
 
     return (
