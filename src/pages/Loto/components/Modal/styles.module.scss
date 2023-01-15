@@ -82,4 +82,14 @@
         width: 100%;
         height: auto;
     }
+
+    .display {
+        display: flex !important;
+        align-items: center;
+        height: 90%;
+    }
+
+    .hidden {
+        display: none;
+    }
 }
