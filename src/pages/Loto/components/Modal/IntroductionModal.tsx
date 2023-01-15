@@ -16,7 +16,7 @@ const IntroductionModal:FC<IProps> = ({isShow, setIsShow}) => {
     useEffect(() => {
         setTimeout(() => {
             setIsShowImage(true)
-        }, 500)
+        }, 800)
     }, [])
 
     return (
@@ -27,12 +27,9 @@ const IntroductionModal:FC<IProps> = ({isShow, setIsShow}) => {
             isShowFooter={false}
         >
             <div className={styles.popupIntroductionCustom}>
-                <div className={cls(styles.hidden, {[styles.display]: !isShowImage})}>
+                <div className={cls(styles.hidden, {[styles.display]: !isShowImage, [styles.loading]: !isShowImage})}>
                     <LoadingIcon />
                 </div>
-            </div>
-
-            <div className={styles.popupIntroductionCustom}>
                 <div className={cls(styles.hidden, {[styles.display]: isShowImage})}>
                     <img src='/images/introduction/1.png' />
                     <span>----------------------</span>
@@ -45,8 +42,8 @@ const IntroductionModal:FC<IProps> = ({isShow, setIsShow}) => {
                     <img src='/images/introduction/4.png' />
                     <span>----------------------</span>
                     <img src='/images/introduction/5.png' />
-              </div>
-          </div>
+                </div>
+            </div>
         </Popup>
     )
 }
