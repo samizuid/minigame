@@ -27,13 +27,13 @@ const IntroductionModal:FC<IProps> = ({isShow, setIsShow}) => {
             isShowFooter={false}
         >
             <div className={styles.popupIntroductionCustom}>
-                <div className={cls(styles.hidden, {[styles.display]: isShowImage})}>
+                <div className={cls(styles.hidden, {[styles.display]: !isShowImage})}>
                     <LoadingIcon />
                 </div>
             </div>
 
             <div className={styles.popupIntroductionCustom}>
-                <div className={cls(styles.hidden, {[styles.display]: !isShowImage})}>
+                <div className={cls(styles.hidden, {[styles.display]: isShowImage})}>
                     <img src='/images/introduction/1.png' />
                     <span>----------------------</span>
                     <div>1. Chế độ người chơi</div>
