@@ -8,7 +8,7 @@ export function transpose(matrix: number[][]) {
   return row.map((_, column) => matrix.map((row) => row[column]))
 }
 
-function generateTicketTemplate() {
+const generateTicketTemplate = () => {
   const matrix = [];
   for (let i = 0; i < 9; i++) {
     matrix.push(new Array(9).fill(0));
@@ -45,7 +45,7 @@ function generateTicketTemplate() {
   return matrix;
 }
 
-function checkConsecutiveOnes(arr: any) {
+const checkConsecutiveOnes = (arr: any) => {
   let consecutiveOnes = 0;
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] === 1) {
@@ -103,7 +103,7 @@ const generateTicketTemplateWrapper: any = () => {
   return templateTicket
 }
 
-export function generateArrayNumbers(min: number, max: number, length: number) {
+export const generateArrayNumbers = (min: number, max: number, length: number) => {
   let array = []
 
   while (array.length < length) {
@@ -119,7 +119,7 @@ export function generateArrayNumbers(min: number, max: number, length: number) {
 }
 
 
-function generateTicketRaw() {
+const generateTicketRaw = () => {
   const matrix = []
 
   for (let i = 0; i < 9; i++) {
@@ -141,7 +141,7 @@ function generateTicketRaw() {
   return matrix
 }
 
-export function generatePlayerTicket() {
+export const generatePlayerTicket = () => {
   const ticketRaw = generateTicketRaw()
   const valueTicket = transpose(ticketRaw)
   const templateTicket = generateTicketTemplateWrapper()

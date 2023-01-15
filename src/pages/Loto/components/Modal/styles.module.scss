@@ -30,6 +30,10 @@
     .traffic {
         margin-top: 5px;
         color: var(--black);
+        border: 0;
+        font-weight: 500;
+        text-decoration: underline;
+        text-underline-offset: 2px;
 
         .trafficNumber {
             color: #bc9e3c;
@@ -52,5 +56,30 @@
 
     .color.selected {
         outline: 3px solid var(--mainBgPlayer);
+    }
+}
+
+.popupIntroductionCustom {
+    height: calc(100vh - 180px);
+    width: auto;
+    overflow-y: auto;
+
+    div {
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--black);
+    }
+
+    span {
+        display: block;
+        text-align: center;
+    }
+
+    img {
+        margin-top: 5px;
+        width: 100%;
+        height: auto;
     }
 }

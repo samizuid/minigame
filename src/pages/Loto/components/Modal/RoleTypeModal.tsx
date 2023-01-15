@@ -1,7 +1,8 @@
-import {FC} from 'react'
+import {FC, useState} from 'react'
 import { Popup } from '../../../../components'
 import cls from 'classnames'
 import { ROLE_TYPES } from '../../Loto'
+import IntroductionModal from './IntroductionModal'
 
 import styles from './styles.module.scss'
 
@@ -12,7 +13,10 @@ interface IProps {
 }
 
 const RoleTypeModal:FC<IProps> = ({isShow, setIsShow, handleSelectRole}) => {
+  const [isShowIntro, setIsShowIntro] = useState(false)
+
     return (
+      <>
         <Popup
             title='Chọn chế độ chơi'
             isOpen={isShow}
@@ -34,11 +38,17 @@ const RoleTypeModal:FC<IProps> = ({isShow, setIsShow, handleSelectRole}) => {
             >
               Người gọi số
             </button>
-            {/* <div className={styles.traffic}>
-              Lượt truy cập: <span className={styles.trafficNumber}>{'chưa cập nhật'}</span>
-            </div> */}
+            <button onClick={() => setIsShowIntro(true)} className={styles.traffic}>
+              Hướng dẫn
+            </button>
           </div>
         </Popup>
+        {isShowIntro &&
+          <IntroductionModal
+            isShow={isShowIntro}
+            setIsShow={setIsShowIntro}
+          />}
+      </>
     )
 }
 
