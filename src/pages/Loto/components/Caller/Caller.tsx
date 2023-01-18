@@ -38,6 +38,12 @@ export const Caller: React.FunctionComponent<{
     setIsShowReloadPopup(false)
   }})
 
+  useEffect(() => {
+    document.addEventListener("touchstart", function(){
+      playingVoice.current.play();
+    }, false);
+  }, [])
+
   // Handle voice
   useEffect(() => {
     if([isShowReloadPopup, isShowVoice, isShowCountdown].some(Boolean)) {
@@ -62,13 +68,13 @@ export const Caller: React.FunctionComponent<{
     if (!playingVoice.current) return
 
     if (isStartedCall) {
-      const playButton = document.getElementById("play-button") as HTMLElement
-      const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement
-  
-      document.addEventListener("touchstart", function(){
-        console.log('hhahahah')
-        playingVoice.current.play();
-      }, false);
+      const element = document.getElementById('caller-id') as HTMLElement
+      // const event = new TouchEvent("touchstart");
+      // element.dispatchEvent(event);
+
+      const event = document.createEvent('HTMLEvents')
+
+      event.initEvent('touchstart', true, false)
 
       playingVoice.current.play()
       // const playAudio = document.getElementById('play-audio')
@@ -119,7 +125,7 @@ export const Caller: React.FunctionComponent<{
   }
 
   return (
-    <div className={styles.caller}>
+    <div id='caller-id' className={styles.caller}>
       <div className={styles.callerHeader}>
         <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
         <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
