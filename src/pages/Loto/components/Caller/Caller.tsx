@@ -69,8 +69,8 @@ export const Caller: React.FunctionComponent<{
 
     if (isStartedCall) {
       const element = document.getElementById('caller-id') as HTMLElement
-      // const event = new TouchEvent("touchstart");
-      // element.dispatchEvent(event);
+      const event2 = new TouchEvent("touchstart");
+      element.dispatchEvent(event2);
 
       const event = document.createEvent('HTMLEvents')
 
@@ -138,8 +138,7 @@ export const Caller: React.FunctionComponent<{
           >
             <FiXCircle />
           </button> */}
-          <button id="play-button">Play</button>
-          <audio id="audio-player" src="/voices/male-north/1.mp3"></audio>
+          <button id="play-button">Play1</button>
 
           <button
             type='button'
