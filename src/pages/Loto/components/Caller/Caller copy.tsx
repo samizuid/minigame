@@ -62,14 +62,6 @@ export const Caller: React.FunctionComponent<{
     if (!playingVoice.current) return
 
     if (isStartedCall) {
-      const playButton = document.getElementById("play-button") as HTMLElement
-      const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement
-  
-      document.addEventListener("touchstart", function(){
-        console.log('hhahahah')
-        playingVoice.current.play();
-      }, false);
-
       playingVoice.current.play()
       // const playAudio = document.getElementById('play-audio')
       // playAudio?.click()
@@ -132,9 +124,6 @@ export const Caller: React.FunctionComponent<{
           >
             <FiXCircle />
           </button> */}
-          <button id="play-button">Play</button>
-          <audio id="audio-player" src="/voices/male-north/1.mp3"></audio>
-
           <button
             type='button'
             className={styles.button}
