@@ -31,6 +31,7 @@ export const Caller: React.FunctionComponent<{
   const { timer, startTimer, stopTimer } = useCountDown({})
   const numberCurrent = calledNumbers.at(-1)
   const pastTimes =  calledNumbers.slice(0, calledNumbers.length-1).slice(-4)
+  const [audios, setAudios] = useState<any>([])
 
   useClickOutSide({wrapperClass: popupStyles.popupContainer,  callback: () =>  {
     setIsShowVoice(false)
@@ -52,39 +53,47 @@ export const Caller: React.FunctionComponent<{
   }, [isShowReloadPopup, isShowVoice, isShowCountdown])
 
   useEffect(() => {
-    if (!numberCurrent) return
+    // if (!numberCurrent) return
 
-    playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
-    playingVoice.current.load()
+    const audioInit = []
+    for (let i = 1; i <= 90; ++i) {
+      const au = new Audio(`/voices/${voice}/${i}.mp3`)
+      au.load()
+      audioInit.push(au)
+    }
+    setAudios(audioInit)
+
+    // playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
+    // playingVoice.current.load()
 
     return () => {
       playingVoice.current?.pause()
       playingVoice.current = null
     }
-  }, [voice, numberCurrent])
+  }, [voice])
 
 
   useEffect(() => {
-    if (!playingVoice.current) return
+    // if (!playingVoice.current) return
+    if (!numberCurrent) return
+
 
     if (isStartedCall) {
-      const element = document.getElementById('caller-id') as HTMLElement
-      const event2 = new TouchEvent("touchstart");
-      element.dispatchEvent(event2);
+      // const element = document.getElementById('caller-id') as HTMLElement
+      // const event2 = new TouchEvent("touchstart");
+      // element.dispatchEvent(event2);
 
       const event = document.createEvent('HTMLEvents')
       event.initEvent('touchstart', true, false)
 
+      playingVoice.current = audios[numberCurrent - 1]
+      console.log('%c>>> log audios', 'color:green', audios)
       playingVoice.current.play()
     } else {
       playingVoice.current.pause()
       playingVoice.current = null
     }
   }, [numberCurrent, isStartedCall, calledNumbers])
-
-  const handleClick = () => {
-    playingVoice.current?.play()
-  }
 
   // Handle countdown
   useEffect(() => {
