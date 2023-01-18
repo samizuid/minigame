@@ -68,7 +68,7 @@ export const Caller: React.FunctionComponent<{
     if (!playingVoice.current) return
 
     if (isStartedCall) {
-      const element = document.getElementById('caller-id') as HTMLElement
+      const element = document.getElementById('caller-id') as any
       const event2 = new TouchEvent("touchstart");
       element.dispatchEvent(event2);
 
@@ -76,9 +76,8 @@ export const Caller: React.FunctionComponent<{
 
       event.initEvent('touchstart', true, false)
 
+      element.touchstart()
       playingVoice.current.play()
-      // const playAudio = document.getElementById('play-audio')
-      // playAudio?.click()
     } else {
       playingVoice.current.pause()
       playingVoice.current = null
