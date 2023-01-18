@@ -53,44 +53,44 @@ export const Caller: React.FunctionComponent<{
   }, [isShowReloadPopup, isShowVoice, isShowCountdown])
 
   useEffect(() => {
-    // if (!numberCurrent) return
-
     const audioInit = []
-    for (let i = 1; i <= 90; ++i) {
-      const au = new Audio(`/voices/${voice}/${i}.mp3`)
-      au.load()
-      audioInit.push(au)
-    }
-    setAudios(audioInit)
 
-    // playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
-    // playingVoice.current.load()
+    for (let i = 1; i <= 90; ++i) {
+      const audio = new Audio(`/voices/${voice}/${i}.mp3`)
+      audioInit.push(audio)
+    }
+
+    setAudios(audioInit)
+  }, [voice])
+
+  useEffect(() => {
+    if (!numberCurrent) return
+
+    playingVoice.current = audios[numberCurrent - 1]
+    playingVoice.current.load()
 
     return () => {
       playingVoice.current?.pause()
       playingVoice.current = null
     }
-  }, [voice])
+  }, [numberCurrent])
 
 
   useEffect(() => {
-    // if (!playingVoice.current) return
-    if (!numberCurrent) return
-
+    if (!playingVoice.current) return
 
     if (isStartedCall) {
-      // const element = document.getElementById('caller-id') as HTMLElement
-      // const event2 = new TouchEvent("touchstart");
-      // element.dispatchEvent(event2);
-
       const event = document.createEvent('HTMLEvents')
       event.initEvent('touchstart', true, false)
 
-      playingVoice.current = audios[numberCurrent - 1]
-      console.log('%c>>> log audios', 'color:green', audios)
       playingVoice.current.play()
     } else {
       playingVoice.current.pause()
+      playingVoice.current = null
+    }
+
+    return () => {
+      playingVoice.current?.pause()
       playingVoice.current = null
     }
   }, [numberCurrent, isStartedCall, calledNumbers])
