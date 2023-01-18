@@ -11,7 +11,7 @@ import popupStyles from '../../../../components/Popup/Popup.module.scss'
 import styles from './Caller.module.scss'
 
 const CALL_COUNT_DOWN = '5'
-const CALL_VOICE = 'male-south'
+const CALL_VOICE = 'gay'
 
 export const Caller: React.FunctionComponent<{
   isShowRolePopup: boolean
@@ -80,6 +80,7 @@ export const Caller: React.FunctionComponent<{
     if (!playingVoice.current) return
 
     if (isStartedCall) {
+      // trick for IOS
       const event = document.createEvent('HTMLEvents')
       event.initEvent('touchstart', true, false)
 
@@ -126,21 +127,11 @@ export const Caller: React.FunctionComponent<{
   }
 
   return (
-    <div id='caller-id' className={styles.caller}>
+    <div className={styles.caller}>
       <div className={styles.callerHeader}>
         <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
         <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
         <div className={styles.setting}>
-          {/* <button
-            id='play-audio'
-            type='button'
-            className={styles.button}
-            onClick={handleClick}
-          >
-            <FiXCircle />
-          </button> */}
-          <button id="play-button">Play1</button>
-
           <button
             type='button'
             className={styles.button}

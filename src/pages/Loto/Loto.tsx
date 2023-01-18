@@ -253,11 +253,11 @@ export const Loto = () => {
           setIsShow={setIsShowReloadPopup}/>
       )}
 
-      {!isShowReloadPopup && isMatchIphone && isShowNotifySupport && (
+      {/* {!isShowReloadPopup && isMatchIphone && isShowNotifySupport && (
         <NotSupportIOSModal
           isShow={isShowNotifySupport}
           setIsShow={setIsShowNotifySupport}/>
-      )}
+      )} */}
 
       {isShowTheme && !isCaller && (
         <ThemeModal
