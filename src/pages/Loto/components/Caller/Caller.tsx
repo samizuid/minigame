@@ -88,11 +88,6 @@ export const Caller: React.FunctionComponent<{
       playingVoice.current.pause()
       playingVoice.current = null
     }
-
-    return () => {
-      playingVoice.current?.pause()
-      playingVoice.current = null
-    }
   }, [numberCurrent, isStartedCall, calledNumbers])
 
   // Handle countdown
