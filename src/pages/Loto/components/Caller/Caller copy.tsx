@@ -28,7 +28,7 @@ export const Caller: React.FunctionComponent<{
   const [voice, setVoice] = useState(CALL_VOICE)
   const [isShowVoice, setIsShowVoice] = useState<boolean>(false)
   const [countdown, setCountdown] = useState(CALL_COUNT_DOWN)
-  const { timer, startTimer, stopTimer } = useCountDown({})
+  const { timer, startTimer, stopTimer } = useCountDown()
   const numberCurrent = calledNumbers.at(-1)
   const pastTimes =  calledNumbers.slice(0, calledNumbers.length-1).slice(-4)
 
