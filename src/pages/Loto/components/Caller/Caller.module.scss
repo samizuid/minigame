@@ -37,11 +37,14 @@
     width: 35%;
   }
 
-  .timer {
-    position: absolute;
-    color: var(--mainBgCaller);
-    right: 10%;
-    top: 20px;
+  .timerWrapper {
+    position: relative;
+    .timer {
+      position: absolute;
+      color: var(--mainBgCaller);
+      right: 5px;
+      top: 20px;
+    }
   }
 }
 

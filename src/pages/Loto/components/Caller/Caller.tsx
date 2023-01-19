@@ -131,10 +131,14 @@ export const Caller: React.FunctionComponent<{
   return (
     <div className={styles.caller}>
       <div className={styles.callerHeader}>
-        <div className={styles.timer}>{timer}s</div>
         <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
         <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
         <div className={styles.setting}>
+          <div className={styles.timerWrapper}>
+            <div className={styles.timer}>
+              {timer}s
+            </div>
+          </div>
           <button
             type='button'
             className={styles.button}
