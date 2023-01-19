@@ -1,15 +1,13 @@
 import { useEffect, useState, useRef } from 'react'
 
-export const useCountDown = ({
-  start,
-}: {
-  start?: number
-}): {
+export const useCountDown = (): {
   timer: number
   startTimer: (time: number) => void
   stopTimer: () => void
+  setIsStart: (isStart: boolean) => void
 } => {
-  const [timer, setTimer] = useState(start || 0)
+  const [isStart, setIsStart] = useState(false)
+  const [timer, setTimer] = useState(0)
   const intervalRef = useRef<any>()
 
   const stopTimer = () => {
@@ -21,6 +19,8 @@ export const useCountDown = ({
   }
 
   useEffect(() => {
+    if (!isStart) return
+
     if (timer <= 0) return stopTimer()
 
     intervalRef.current = setInterval(() => {
@@ -30,7 +30,7 @@ export const useCountDown = ({
     return () => {
       intervalRef.current && clearInterval(intervalRef.current)
     }
-  }, [timer])
+  }, [timer, isStart])
 
-  return { timer, startTimer, stopTimer }
+  return { timer, startTimer, stopTimer, setIsStart }
 }

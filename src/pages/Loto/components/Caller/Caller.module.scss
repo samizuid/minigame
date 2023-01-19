@@ -36,6 +36,13 @@
     gap: 5px;
     width: 35%;
   }
+
+  .timer {
+    position: absolute;
+    color: var(--mainBgCaller);
+    right: 10%;
+    top: 20px;
+  }
 }
 
 .callerTitle {

@@ -28,7 +28,7 @@ export const Caller: React.FunctionComponent<{
   const [voice, setVoice] = useState(CALL_VOICE)
   const [isShowVoice, setIsShowVoice] = useState<boolean>(false)
   const [countdown, setCountdown] = useState(CALL_COUNT_DOWN)
-  const { timer, startTimer, stopTimer } = useCountDown({})
+  const { timer, startTimer, stopTimer, setIsStart } = useCountDown()
   const numberCurrent = calledNumbers.at(-1)
   const pastTimes =  calledNumbers.slice(0, calledNumbers.length-1).slice(-4)
   const [audios, setAudios] = useState<any>([])
@@ -93,16 +93,18 @@ export const Caller: React.FunctionComponent<{
 
   // Handle countdown
   useEffect(() => {
+    startTimer(+countdown)
+  }, [countdown])
+
+  useEffect(() => {
+    setIsStart(isStartedCall)
     if (!isStartedCall) return
 
     if (timer === 0) {
       startTimer(+countdown)
-    }
-
-    if (timer === +countdown) {
       handleCallNewNumber()
     }
-  }, [isStartedCall, countdown, timer])
+  }, [isStartedCall, timer])
 
   useEffect(() => {
     if (!isResetCaller) return
@@ -129,6 +131,7 @@ export const Caller: React.FunctionComponent<{
   return (
     <div className={styles.caller}>
       <div className={styles.callerHeader}>
+        <div className={styles.timer}>{timer}s</div>
         <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
         <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
         <div className={styles.setting}>
