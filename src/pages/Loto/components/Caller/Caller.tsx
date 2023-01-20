@@ -14,6 +14,7 @@ const CALL_COUNT_DOWN = '5'
 const CALL_VOICE = 'gay'
 
 export const Caller: React.FunctionComponent<{
+  isPhone: boolean
   isShowRolePopup: boolean
   isShowReloadPopup: boolean
   isStartedCall: boolean
@@ -21,7 +22,7 @@ export const Caller: React.FunctionComponent<{
   setIsStartedCall:  (isStartedCall: boolean) => void
   setIsResetCaller: (isBoolean: boolean) => void
   setIsShowReloadPopup: (isShow: boolean) => void
-}> = ({ isResetCaller, isStartedCall, isShowReloadPopup, setIsResetCaller, setIsStartedCall, setIsShowReloadPopup }) => {
+}> = ({ isPhone, isResetCaller, isStartedCall, isShowReloadPopup, setIsResetCaller, setIsStartedCall, setIsShowReloadPopup }) => {
   const playingVoice: any = useRef(new Audio(``))
   const [calledNumbers, setCalledNumbers] = useState<number[]>([])
   const [isShowCountdown, setIsShowCountdown] = useState<boolean>(false)
@@ -30,6 +31,7 @@ export const Caller: React.FunctionComponent<{
   const [countdown, setCountdown] = useState(CALL_COUNT_DOWN)
   const { timer, startTimer, stopTimer, setIsStart } = useCountDown()
   const numberCurrent = calledNumbers.at(-1)
+  const [numberCurrentWaiting, setNumberCurrentWaiting] = useState<any>('?')
   const pastTimes =  calledNumbers.slice(0, calledNumbers.length-1).slice(-4)
   const [audios, setAudios] = useState<any>([])
 
@@ -69,6 +71,10 @@ export const Caller: React.FunctionComponent<{
     playingVoice.current = audios[numberCurrent - 1]
     playingVoice.current.load()
 
+    setTimeout(() => {
+      setNumberCurrentWaiting(numberCurrent)
+    }, isPhone ? 1000 : 0)
+
     return () => {
       playingVoice.current?.pause()
       playingVoice.current = null
@@ -100,8 +106,13 @@ export const Caller: React.FunctionComponent<{
     setIsStart(isStartedCall)
     if (!isStartedCall) return
 
+    const needToCall = isPhone ? 1 : 0
+
     if (timer === 0) {
       startTimer(+countdown)
+    }
+
+    if (timer === needToCall) {
       handleCallNewNumber()
     }
   }, [isStartedCall, timer])
@@ -132,7 +143,7 @@ export const Caller: React.FunctionComponent<{
     <div className={styles.caller}>
       <div className={styles.callerHeader}>
         <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
-        <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
+        <div className={styles.callingTime}>{calledNumbers.length ? numberCurrentWaiting : '?' }</div>
         <div className={styles.setting}>
           <div className={styles.timerWrapper}>
             <div className={styles.timer}>

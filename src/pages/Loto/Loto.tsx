@@ -200,6 +200,7 @@ export const Loto = () => {
 
           {isCaller && (
             <Caller
+              isPhone={!!(isMatchAndroid || isMatchIphone)}
               isShowRolePopup={isShowRolePopup}
               isShowReloadPopup={isShowReloadPopup}
               isStartedCall={isStartedCall}

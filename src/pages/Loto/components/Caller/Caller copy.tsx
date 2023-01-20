@@ -11,7 +11,7 @@ import popupStyles from '../../../../components/Popup/Popup.module.scss'
 import styles from './Caller.module.scss'
 
 const CALL_COUNT_DOWN = '5'
-const CALL_VOICE = 'male-south'
+const CALL_VOICE = 'gay'
 
 export const Caller: React.FunctionComponent<{
   isShowRolePopup: boolean
@@ -28,15 +28,22 @@ export const Caller: React.FunctionComponent<{
   const [voice, setVoice] = useState(CALL_VOICE)
   const [isShowVoice, setIsShowVoice] = useState<boolean>(false)
   const [countdown, setCountdown] = useState(CALL_COUNT_DOWN)
-  const { timer, startTimer, stopTimer } = useCountDown()
+  const { timer, startTimer, stopTimer, setIsStart } = useCountDown()
   const numberCurrent = calledNumbers.at(-1)
   const pastTimes =  calledNumbers.slice(0, calledNumbers.length-1).slice(-4)
+  const [audios, setAudios] = useState<any>([])
 
   useClickOutSide({wrapperClass: popupStyles.popupContainer,  callback: () =>  {
     setIsShowVoice(false)
     setIsShowCountdown(false)
     setIsShowReloadPopup(false)
   }})
+
+  useEffect(() => {
+    document.addEventListener("touchstart", function(){
+      playingVoice.current.play();
+    }, false);
+  }, [])
 
   // Handle voice
   useEffect(() => {
@@ -46,47 +53,58 @@ export const Caller: React.FunctionComponent<{
   }, [isShowReloadPopup, isShowVoice, isShowCountdown])
 
   useEffect(() => {
+    const audioInit = []
+
+    for (let i = 1; i <= 90; ++i) {
+      const audio = new Audio(`/voices/${voice}/${i}.mp3`)
+      audioInit.push(audio)
+    }
+
+    setAudios(audioInit)
+  }, [voice])
+
+  useEffect(() => {
     if (!numberCurrent) return
 
-    playingVoice.current = new Audio(`/voices/${voice}/${numberCurrent}.mp3`);
+    playingVoice.current = audios[numberCurrent - 1]
     playingVoice.current.load()
 
     return () => {
       playingVoice.current?.pause()
       playingVoice.current = null
     }
-  }, [voice, numberCurrent])
+  }, [numberCurrent])
 
 
   useEffect(() => {
     if (!playingVoice.current) return
 
     if (isStartedCall) {
+      // trick for IOS
+      const event = document.createEvent('HTMLEvents')
+      event.initEvent('touchstart', true, false)
+
       playingVoice.current.play()
-      // const playAudio = document.getElementById('play-audio')
-      // playAudio?.click()
     } else {
       playingVoice.current.pause()
       playingVoice.current = null
     }
   }, [numberCurrent, isStartedCall, calledNumbers])
 
-  const handleClick = () => {
-    playingVoice.current?.play()
-  }
-
   // Handle countdown
   useEffect(() => {
+    startTimer(+countdown)
+  }, [countdown])
+
+  useEffect(() => {
+    setIsStart(isStartedCall)
     if (!isStartedCall) return
 
     if (timer === 0) {
       startTimer(+countdown)
-    }
-
-    if (timer === +countdown) {
       handleCallNewNumber()
     }
-  }, [isStartedCall, countdown, timer])
+  }, [isStartedCall, timer])
 
   useEffect(() => {
     if (!isResetCaller) return
@@ -116,14 +134,11 @@ export const Caller: React.FunctionComponent<{
         <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
         <div className={styles.callingTime}>{calledNumbers.length ? numberCurrent : '?' }</div>
         <div className={styles.setting}>
-          {/* <button
-            id='play-audio'
-            type='button'
-            className={styles.button}
-            onClick={handleClick}
-          >
-            <FiXCircle />
-          </button> */}
+          <div className={styles.timerWrapper}>
+            <div className={styles.timer}>
+              {timer}s
+            </div>
+          </div>
           <button
             type='button'
             className={styles.button}
