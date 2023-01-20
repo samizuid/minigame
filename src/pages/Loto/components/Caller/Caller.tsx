@@ -30,7 +30,7 @@ export const Caller: React.FunctionComponent<{
   const [isShowVoice, setIsShowVoice] = useState<boolean>(false)
   const [countdown, setCountdown] = useState(CALL_COUNT_DOWN)
   const { timer, startTimer, stopTimer, setIsStart } = useCountDown()
-  const numberCurrent = calledNumbers.at(-1)
+  const [numberCurrent, setNumberCurrent] = useState<number>()
   const [numberCurrentWaiting, setNumberCurrentWaiting] = useState<any>('?')
   const pastTimes =  calledNumbers.slice(0, calledNumbers.length-1).slice(-4)
   const [audios, setAudios] = useState<any>([])
@@ -71,16 +71,11 @@ export const Caller: React.FunctionComponent<{
     playingVoice.current = audios[numberCurrent - 1]
     playingVoice.current.load()
 
-    setTimeout(() => {
-      setNumberCurrentWaiting(numberCurrent)
-    }, isPhone ? 1000 : 0)
-
     return () => {
       playingVoice.current?.pause()
       playingVoice.current = null
     }
   }, [numberCurrent])
-
 
   useEffect(() => {
     if (!playingVoice.current) return
@@ -95,7 +90,13 @@ export const Caller: React.FunctionComponent<{
       playingVoice.current.pause()
       playingVoice.current = null
     }
-  }, [numberCurrent, isStartedCall, calledNumbers])
+  }, [numberCurrent, isStartedCall])
+
+  useEffect(() => {
+    if (numberCurrentWaiting === '?') return
+
+    setCalledNumbers([...calledNumbers, numberCurrentWaiting])
+  }, [numberCurrentWaiting])
 
   // Handle countdown
   useEffect(() => {
@@ -122,6 +123,8 @@ export const Caller: React.FunctionComponent<{
 
     setCalledNumbers([])
     setIsResetCaller(false)
+    setNumberCurrentWaiting('?')
+    startTimer(+countdown)
 
   }, [isResetCaller])
 
@@ -135,7 +138,10 @@ export const Caller: React.FunctionComponent<{
         stopTimer()
       }
     } else {
-      setCalledNumbers([...calledNumbers, randomNumber])
+      setNumberCurrent(randomNumber)
+      setTimeout(() => {
+        setNumberCurrentWaiting(randomNumber)
+      }, isPhone ? 1000 : 0)
     }
   }
 
@@ -143,7 +149,7 @@ export const Caller: React.FunctionComponent<{
     <div className={styles.caller}>
       <div className={styles.callerHeader}>
         <div className={styles.callingPastTime}>{pastTimes.join(' - ')}</div>
-        <div className={styles.callingTime}>{calledNumbers.length ? numberCurrentWaiting : '?' }</div>
+        <div className={styles.callingTime}>{numberCurrentWaiting}</div>
         <div className={styles.setting}>
           <div className={styles.timerWrapper}>
             <div className={styles.timer}>
