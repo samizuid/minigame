@@ -155,8 +155,8 @@ export const Loto = () => {
             className={cls(styles.button)}
           >
             {isStartedCall ?
-              <BsPlayFill onClick={() => setIsStartedCall(false)} /> :
-              <BsPauseFill onClick={() => setIsStartedCall(true)}  />
+              <BsPauseFill onClick={() => setIsStartedCall(false)} /> :
+              <BsPlayFill onClick={() => setIsStartedCall(true)}  />
             }
             </button>}
 
