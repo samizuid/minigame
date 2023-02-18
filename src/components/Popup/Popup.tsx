@@ -1,6 +1,4 @@
 import cls from 'classnames'
-import { Children } from 'react'
-
 import { ReactComponent as CloseIcon } from '../../assets/close-icon.svg'
 
 import styles from './Popup.module.scss'

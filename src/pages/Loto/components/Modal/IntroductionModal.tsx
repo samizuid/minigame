@@ -33,14 +33,14 @@ const IntroductionModal:FC<IProps> = ({isShow, setIsShow}) => {
                 <div className={cls(styles.hidden, {[styles.display]: isShowImage})}>
                     <img src='/images/introduction/1.png' />
                     <span>----------------------</span>
-                    <div>1. Chế độ người chơi</div>
+                    <div className={styles.title}>1. Chế độ người chơi</div>
                     <img src='/images/introduction/2.png' />
-                    <span>----------------------</span>
+                    <span>-----</span>
                     <img src='/images/introduction/3.png' />
                     <span>----------------------</span>
-                    <div>2. Chế độ người gọi số</div>
+                    <div className={styles.title}>2. Chế độ người gọi số</div>
                     <img src='/images/introduction/4.png' />
-                    <span>----------------------</span>
+                    <span>-----</span>
                     <img src='/images/introduction/5.png' />
                 </div>
             </div>

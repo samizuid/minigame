@@ -129,7 +129,7 @@ const generateTicketRaw = () => {
       let num
       do {
         const start = (i * 10) || 1
-        const end =  start + (i === 8 ? 10 : 8)
+        const end = start + (i === 8 ? 10 : 8)
         num = randomIntFromInterval(start, end)
       } while (usedNumbers.has(num))
       usedNumbers.add(num)

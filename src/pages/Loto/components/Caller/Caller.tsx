@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { ImMusic, BiTime, FiXCircle} from 'react-icons/all'
+import { ImMusic, BiTime} from 'react-icons/all'
 import cls from 'classnames'
 
 import VoiceModal from './Modal/VoiceModal';

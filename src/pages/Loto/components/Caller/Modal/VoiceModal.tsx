@@ -16,10 +16,8 @@ const VoiceModal:FC<IProps> = ({voice, isShowVoice, setVoice, setIsShowVoice}) =
         { key: 'gay', value: 'Bê Đê' },
         { key: 'male-south', value: 'Trai Miền Nam' },
         { key: 'male-north', value: 'Trai Miền Bắc' },
-        // { key: 'male-middle', value: 'Trai Miền Trung' },
         { key: 'female-south', value: 'Nữ Miền Nam' },
         { key: 'female-north', value: 'Nữ Miền Bắc' },
-        // { key: 'female-middle', value: 'Nữ Miền Trung' },
     ]
 
     return (
